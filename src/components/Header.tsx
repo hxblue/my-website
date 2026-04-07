@@ -1,28 +1,39 @@
-import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 
-/**
- * 导航头部组件
- * 包含 Logo 和导航链接，支持移动端菜单
- */
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
-  // 监听滚动事件，控制导航栏样式
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 判断是否在首页
+  const isHomePage = location.pathname === '/';
 
   const navLinks = [
-    { name: '关于', href: '#about' },
-    { name: '项目', href: '#projects' },
-    { name: '联系', href: '#contact' },
-  ]
+    { name: '关于', href: '/#about', isAnchor: true },
+    { name: '项目', href: '/#projects', isAnchor: true },
+    { name: '博客', href: '/blog', isAnchor: false },
+    { name: '联系', href: '/#contact', isAnchor: true },
+  ];
+
+  const handleNavClick = (href: string, isAnchor: boolean) => {
+    setIsMobileMenuOpen(false);
+
+    if (isAnchor && isHomePage) {
+      // 在首页锚点跳转
+      const element = document.querySelector(href.replace('/', ''));
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header
@@ -33,20 +44,24 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#" className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <Link
+            to="/"
+            className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+          >
             Portfolio
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
+                onClick={() => handleNavClick(link.href, link.isAnchor)}
                 className="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -65,21 +80,21 @@ const Header = () => {
           <div className="md:hidden py-4 border-t border-white/10">
             <nav className="flex flex-col space-y-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}
                   className="text-gray-300 hover:text-white transition-colors duration-200 text-sm font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => handleNavClick(link.href, link.isAnchor)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
         )}
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
