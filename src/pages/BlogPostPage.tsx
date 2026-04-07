@@ -1,5 +1,5 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import BlogDetail from '../components/BlogDetail';
 import type { BlogPost } from '../types/blog';
 import { blogs } from '../data/blogs';
@@ -15,33 +15,64 @@ const postsMap: Record<string, string> = {
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
+  const [error, setError] = useState<string | null>(null);
 
   const post = useMemo<BlogPost | null>(() => {
-    if (!slug) return null;
+    try {
+      if (!slug) {
+        console.log('No slug provided');
+        return null;
+      }
 
-    // 获取元数据
-    const meta = blogs.find(b => b.slug === slug);
-    if (!meta) return null;
+      // 获取元数据
+      const meta = blogs.find(b => b.slug === slug);
+      if (!meta) {
+        console.log('Meta not found for slug:', slug);
+        return null;
+      }
 
-    // 获取 Markdown 内容
-    const content = postsMap[slug];
-    if (!content) return null;
+      // 获取 Markdown 内容
+      const content = postsMap[slug];
+      if (!content) {
+        console.log('Content not found for slug:', slug);
+        return null;
+      }
 
-    // 解析 front matter
-    const { data, content: markdownContent } = matter(content);
+      console.log('Raw content:', content.substring(0, 100));
 
-    return {
-      slug,
-      title: data.title || meta.title,
-      date: data.date || meta.date,
-      cover: data.cover || meta.cover,
-      tags: data.tags || meta.tags,
-      excerpt: data.excerpt || meta.excerpt,
-      content: markdownContent,
-    };
+      // 解析 front matter
+      const parsed = matter(content);
+      console.log('Parsed data:', parsed.data);
+
+      return {
+        slug,
+        title: parsed.data.title || meta.title,
+        date: parsed.data.date || meta.date,
+        cover: parsed.data.cover || meta.cover,
+        tags: parsed.data.tags || meta.tags,
+        excerpt: parsed.data.excerpt || meta.excerpt,
+        content: parsed.content,
+      };
+    } catch (err) {
+      console.error('Error parsing post:', err);
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return null;
+    }
   }, [slug]);
 
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] text-white pt-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-2xl text-red-400 mb-4">Error loading post</h1>
+          <p className="text-gray-400">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!post) {
+    console.log('Post is null, redirecting...');
     return <Navigate to="/blog" replace />;
   }
 
