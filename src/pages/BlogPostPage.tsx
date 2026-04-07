@@ -1,35 +1,45 @@
 import { useParams, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import BlogDetail from '../components/BlogDetail';
 import type { BlogPost } from '../types/blog';
-import { parseMarkdown } from '../utils/markdown';
-import { Loader2 } from 'lucide-react';
+import { blogs } from '../data/blogs';
+
+// 导入所有 Markdown 文件
+import helloWorld from '../data/posts/hello-world.md?raw';
+import matter from 'gray-matter';
+
+// 文章映射表
+const postsMap: Record<string, string> = {
+  'hello-world': helloWorld,
+};
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (slug) {
-      loadPost(slug);
-    }
+  const post = useMemo<BlogPost | null>(() => {
+    if (!slug) return null;
+
+    // 获取元数据
+    const meta = blogs.find(b => b.slug === slug);
+    if (!meta) return null;
+
+    // 获取 Markdown 内容
+    const content = postsMap[slug];
+    if (!content) return null;
+
+    // 解析 front matter
+    const { data, content: markdownContent } = matter(content);
+
+    return {
+      slug,
+      title: data.title || meta.title,
+      date: data.date || meta.date,
+      cover: data.cover || meta.cover,
+      tags: data.tags || meta.tags,
+      excerpt: data.excerpt || meta.excerpt,
+      content: markdownContent,
+    };
   }, [slug]);
-
-  const loadPost = async (postSlug: string) => {
-    setLoading(true);
-    const data = await parseMarkdown(postSlug);
-    setPost(data);
-    setLoading(false);
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-      </div>
-    );
-  }
 
   if (!post) {
     return <Navigate to="/blog" replace />;
