@@ -1,4 +1,4 @@
-import { BlogPost } from '../types/blog';
+import type { BlogPost } from '../types/blog';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -65,17 +65,16 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
       <div className="prose prose-invert prose-lg max-w-none">
         <ReactMarkdown
           components={{
-            code({ className, children, ...props }) {
+            code({ className, children }) {
               const match = /language-(\w+)/.exec(className || '');
               const language = match ? match[1] : '';
 
               if (language) {
                 return (
                   <SyntaxHighlighter
-                    style={oneDark}
+                    style={oneDark as any}
                     language={language}
                     PreTag="div"
-                    {...props}
                   >
                     {String(children).replace(/\n$/, '')}
                   </SyntaxHighlighter>
@@ -83,7 +82,7 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
               }
 
               return (
-                <code className={className} {...props}>
+                <code className={className}>
                   {children}
                 </code>
               );

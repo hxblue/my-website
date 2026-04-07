@@ -1,4 +1,4 @@
-import { BlogMeta } from '../types/blog';
+import type { BlogMeta } from '../types/blog';
 
 export const blogs: BlogMeta[] = [
   {

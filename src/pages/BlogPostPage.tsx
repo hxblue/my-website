@@ -1,7 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import BlogDetail from '../components/BlogDetail';
-import { BlogPost } from '../types/blog';
+import type { BlogPost } from '../types/blog';
 import { parseMarkdown } from '../utils/markdown';
 import { Loader2 } from 'lucide-react';
 

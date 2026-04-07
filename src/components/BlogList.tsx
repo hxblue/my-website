@@ -1,4 +1,4 @@
-import { BlogMeta } from '../types/blog';
+import type { BlogMeta } from '../types/blog';
 import BlogCard from './BlogCard';
 import { motion } from 'framer-motion';
 

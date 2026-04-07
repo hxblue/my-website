@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { BlogMeta } from '../types/blog';
+import type { BlogMeta } from '../types/blog';
 import { Calendar, Tag } from 'lucide-react';
 
 interface BlogCardProps {

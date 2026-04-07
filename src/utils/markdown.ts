@@ -1,9 +1,14 @@
 // src/utils/markdown.ts
 import matter from 'gray-matter';
-import { BlogMeta, BlogPost } from '../types/blog';
+import type { BlogPost } from '../types/blog';
 
-// 动态导入所有 Markdown 文件
-const postFiles = import.meta.glob('../data/posts/*.md', { as: 'raw', eager: true });
+// 导入所有 Markdown 文件内容
+import helloWorld from '../data/posts/hello-world.md?raw';
+
+// 文件映射表
+const postFiles: Record<string, string> = {
+  '../data/posts/hello-world.md': helloWorld,
+};
 
 export async function parseMarkdown(slug: string): Promise<BlogPost | null> {
   try {
