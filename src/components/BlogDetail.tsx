@@ -1,7 +1,5 @@
 import type { BlogPost } from '../types/blog';
 import ReactMarkdown from 'react-markdown';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Calendar, Tag, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -63,32 +61,7 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
 
       {/* Content */}
       <div className="prose prose-invert prose-lg max-w-none">
-        <ReactMarkdown
-          components={{
-            code({ className, children }) {
-              const match = /language-(\w+)/.exec(className || '');
-              const language = match ? match[1] : '';
-
-              if (language) {
-                return (
-                  <SyntaxHighlighter
-                    style={oneDark as any}
-                    language={language}
-                    PreTag="div"
-                  >
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
-                );
-              }
-
-              return (
-                <code className={className}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        >
+        <ReactMarkdown>
           {post.content}
         </ReactMarkdown>
       </div>
