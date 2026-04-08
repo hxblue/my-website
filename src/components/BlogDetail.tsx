@@ -13,7 +13,7 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
       {/* Back Link */}
       <Link
         to="/blog"
-        className="inline-flex items-center gap-2 text-gray-400 hover:text-purple-400 transition-colors mb-8"
+        className="inline-flex items-center gap-2 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors mb-8"
       >
         <ArrowLeft size={20} />
         返回博客列表
@@ -26,7 +26,7 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-purple-500/20 text-purple-300 rounded-full"
+              className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-purple-500/20 text-purple-700 dark:text-purple-300 rounded-full"
             >
               <Tag size={14} />
               {tag}
@@ -35,12 +35,12 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
           {post.title}
         </h1>
 
         {/* Date */}
-        <div className="flex items-center gap-2 text-gray-400">
+        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
           <Calendar size={18} />
           <time>{new Date(post.date).toLocaleDateString('zh-CN', {
             year: 'numeric',
@@ -51,7 +51,7 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
       </header>
 
       {/* Cover Image */}
-      <div className="aspect-video rounded-xl overflow-hidden mb-8 bg-gray-800">
+      <div className="aspect-video rounded-xl overflow-hidden mb-8 bg-gray-200 dark:bg-gray-800">
         <img
           src={post.cover}
           alt={post.title}
@@ -60,7 +60,7 @@ const BlogDetail = ({ post }: BlogDetailProps) => {
       </div>
 
       {/* Content */}
-      <div className="prose prose-invert prose-lg max-w-none">
+      <div className="prose prose-lg max-w-none dark:prose-invert">
         <ReactMarkdown>
           {post.content}
         </ReactMarkdown>

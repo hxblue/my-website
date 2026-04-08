@@ -3,9 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --bg-dark: #0a0a0a;
+  /* 浅色主题默认变量 */
+  --bg-primary: #fafafa;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-hover: rgba(0, 0, 0, 0.2);
+  --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dark {
+  /* 深色主题变量 */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111827;
+  --bg-tertiary: #1f2937;
   --text-primary: #ffffff;
   --text-secondary: #a1a1aa;
+  --text-tertiary: #6b7280;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(255, 255, 255, 0.2);
   --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
@@ -20,33 +39,43 @@ html {
 }
 
 body {
-  background-color: var(--bg-dark);
+  background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
   min-height: 100vh;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - 浅色主题 */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-dark);
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #c1c1c1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* 深色主题滚动条 */
+.dark ::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #444;
 }
 
@@ -54,4 +83,70 @@ body {
 ::selection {
   background: rgba(102, 126, 234, 0.3);
   color: var(--text-primary);
+}
+
+/* Markdown content styling */
+.prose {
+  color: var(--text-primary);
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  color: var(--text-primary);
+}
+
+.prose p, .prose li, .prose strong, .prose em {
+  color: var(--text-secondary);
+}
+
+.prose code {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.prose pre {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+}
+
+.prose pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.prose blockquote {
+  border-left-color: rgba(139, 92, 246, 0.5);
+  background-color: var(--bg-tertiary);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.prose a {
+  color: #8b5cf6;
+}
+
+.prose a:hover {
+  color: #a78bfa;
+}
+
+/* 浅色主题下 prose 样式调整 */
+.prose.prose-invert {
+  --tw-prose-body: var(--text-secondary);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-links: #8b5cf6;
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-counters: var(--text-tertiary);
+  --tw-prose-bullets: var(--text-tertiary);
+  --tw-prose-hr: var(--border-color);
+  --tw-prose-quotes: var(--text-secondary);
+  --tw-prose-quote-borders: rgba(139, 92, 246, 0.5);
+  --tw-prose-captions: var(--text-tertiary);
+  --tw-prose-code: var(--text-primary);
+  --tw-prose-pre-code: var(--text-secondary);
+  --tw-prose-pre-bg: var(--bg-tertiary);
+  --tw-prose-th-borders: var(--border-color);
+  --tw-prose-td-borders: var(--border-color);
 }

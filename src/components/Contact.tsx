@@ -63,9 +63,9 @@ const Contact = () => {
         >
           {/* Section Title */}
           <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">联系方式</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-white">联系方式</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full" />
-            <p className="mt-4 text-gray-400">
+            <p className="mt-4 text-gray-600 dark:text-gray-400">
               有合作意向或想了解更多？欢迎随时联系我
             </p>
           </motion.div>
@@ -81,14 +81,14 @@ const Contact = () => {
                 href={link.href}
                 target={link.href.startsWith('http') ? '_blank' : undefined}
                 rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="group flex items-center gap-4 p-6 rounded-xl bg-white/5 border border-white/10 hover:border-purple-500/30 hover:bg-white/10 transition-all duration-300"
+                className="group flex items-center gap-4 p-6 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:border-purple-500/30 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-300 shadow-sm dark:shadow-none"
               >
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                  <link.icon className="text-purple-400" size={24} />
+                  <link.icon className="text-purple-500 dark:text-purple-400" size={24} />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">{link.name}</p>
-                  <p className="text-white font-medium group-hover:text-purple-400 transition-colors">
+                  <p className="text-sm text-gray-500 dark:text-gray-500 mb-1">{link.name}</p>
+                  <p className="text-gray-900 dark:text-white font-medium group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                     {link.value}
                   </p>
                 </div>
@@ -98,7 +98,7 @@ const Contact = () => {
 
           {/* CTA */}
           <motion.div variants={itemVariants} className="text-center mt-16">
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 dark:text-gray-500 text-sm">
               期待与您的合作
             </p>
           </motion.div>

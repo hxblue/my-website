@@ -28,7 +28,7 @@ const Projects = () => {
   }
 
   return (
-    <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 bg-black/20" ref={ref}>
+    <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-100/50 dark:bg-black/20" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           variants={containerVariants}
@@ -37,9 +37,9 @@ const Projects = () => {
         >
           {/* Section Title */}
           <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">项目展示</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-white">项目展示</h2>
             <div className="w-20 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full" />
-            <p className="mt-4 text-gray-400 max-w-2xl mx-auto">
+            <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               以下是一些我近期参与开发的项目，涵盖了 Web 应用、移动端开发等多个领域
             </p>
           </motion.div>
@@ -50,7 +50,7 @@ const Projects = () => {
               <motion.div
                 key={project.id}
                 variants={itemVariants}
-                className="group bg-white/5 rounded-2xl overflow-hidden border border-white/10 hover:border-purple-500/30 transition-all duration-300"
+                className="group bg-white dark:bg-white/5 rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 hover:border-purple-500/30 transition-all duration-300 shadow-sm dark:shadow-none hover:shadow-lg dark:hover:shadow-purple-500/10"
               >
                 {/* Project Image */}
                 <div className="aspect-video bg-gradient-to-br from-purple-900/50 to-pink-900/50 flex items-center justify-center overflow-hidden">
@@ -61,10 +61,10 @@ const Projects = () => {
 
                 {/* Project Info */}
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-white group-hover:text-purple-400 transition-colors">
+                  <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white group-hover:text-purple-500 dark:group-hover:text-purple-400 transition-colors">
                     {project.name}
                   </h3>
-                  <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                     {project.description}
                   </p>
 
@@ -73,13 +73,13 @@ const Projects = () => {
                     {project.techStack.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
-                        className="px-2 py-1 text-xs rounded-md bg-white/5 text-gray-300"
+                        className="px-2 py-1 text-xs rounded-md bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.techStack.length > 4 && (
-                      <span className="px-2 py-1 text-xs rounded-md bg-white/5 text-gray-300">
+                      <span className="px-2 py-1 text-xs rounded-md bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300">
                         +{project.techStack.length - 4}
                       </span>
                     )}
@@ -92,7 +92,7 @@ const Projects = () => {
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+                        className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
                       >
                         <Code2 size={16} />
                         <span>源码</span>
@@ -103,7 +103,7 @@ const Projects = () => {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm text-gray-400 hover:text-purple-400 transition-colors"
+                        className="flex items-center gap-2 text-sm text-gray-500 hover:text-purple-500 dark:text-gray-400 dark:hover:text-purple-400 transition-colors"
                       >
                         <ExternalLink size={16} />
                         <span>访问</span>

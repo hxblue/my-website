@@ -62,10 +62,10 @@ const BlogPostPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white pt-20 px-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white pt-20 px-4 transition-colors duration-300">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl text-red-400 mb-4">Error loading post</h1>
-          <p className="text-gray-400">{error}</p>
+          <h1 className="text-2xl text-red-500 mb-4">Error loading post</h1>
+          <p className="text-gray-600 dark:text-gray-400">{error}</p>
         </div>
       </div>
     );
@@ -77,7 +77,7 @@ const BlogPostPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white pt-20 transition-colors duration-300">
       <BlogDetail post={post} />
     </div>
   );
