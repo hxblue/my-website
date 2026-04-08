@@ -80,7 +80,7 @@ const BlogPostPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white pt-20 transition-colors duration-300">
       <BlogDetail post={post} />
-      <CommentSection blogSlug={slug} />
+      {slug && <CommentSection blogSlug={slug} />}
     </div>
   );
 };

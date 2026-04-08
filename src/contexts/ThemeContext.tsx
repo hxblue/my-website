@@ -12,10 +12,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('dark');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     // 从 localStorage 读取主题设置
     const savedTheme = localStorage.getItem('theme') as Theme | null;
     // 检查系统偏好
