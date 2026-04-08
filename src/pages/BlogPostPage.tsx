@@ -1,6 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import BlogDetail from '../components/BlogDetail';
+import CommentSection from '../components/CommentSection';
 import type { BlogPost } from '../types/blog';
 import { blogs } from '../data/blogs';
 
@@ -79,6 +80,7 @@ const BlogPostPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white pt-20 transition-colors duration-300">
       <BlogDetail post={post} />
+      <CommentSection blogSlug={slug} />
     </div>
   );
 };
