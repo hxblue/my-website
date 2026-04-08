@@ -1,6 +1,6 @@
 ---
 title: 'Hello World - 我的第一篇博客'
-date: '2025-04-07'
+date: '2025-04-08'
 cover: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800'
 tags: ['随笔', '开始']
 ---
@@ -19,12 +19,4 @@ tags: ['随笔', '开始']
 
 ## 接下来的计划
 
-我会分享关于前端开发、React、TypeScript 等技术的学习心得。
-
-```tsx
-// 示例代码
-const greeting = "Hello World";
-console.log(greeting);
-```
-
-期待与你的交流！
+这是否是值得纪念的一天呢，我希望它是。Hello World!!!
