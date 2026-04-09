@@ -4,6 +4,8 @@ const NOTION_TOKEN = process.env.VITE_NOTION_TOKEN;
 const NOTION_API_URL = 'https://api.notion.com/v1';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('[Notion API] Request:', req.method, req.url);
+
   // 设置 CORS 头
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -15,9 +17,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // 构建目标 URL
-    const path = req.url?.replace(/^\/api\/notion/, '') || '';
+    // 构建目标 URL - Vercel 会把 /api/notion/databases/xxx 作为 req.url
+    const originalUrl = req.url || '';
+    const path = originalUrl.replace(/^\/api\/notion/, '').replace(/\?.*$/, '');
     const url = `${NOTION_API_URL}${path}`;
+
+    console.log('[Notion API] Proxying to:', url);
+    console.log('[Notion API] Token exists:', !!NOTION_TOKEN);
 
     // 转发请求到 Notion API
     const response = await fetch(url, {
