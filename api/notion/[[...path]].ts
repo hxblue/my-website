@@ -17,10 +17,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // 构建目标 URL - Vercel 会把 /api/notion/databases/xxx 作为 req.url
-    const originalUrl = req.url || '';
-    const path = originalUrl.replace(/^\/api\/notion/, '').replace(/\?.*$/, '');
-    const url = `${NOTION_API_URL}${path}`;
+    // 构建目标 URL - 使用 req.query.path 获取动态路由参数
+    const pathSegments = req.query.path || [];
+    const path = Array.isArray(pathSegments) ? pathSegments.join('/') : pathSegments;
+    const url = `${NOTION_API_URL}/${path}${req.url?.includes('?') ? '?' + req.url.split('?')[1] : ''}`;
 
     console.log('[Notion API] Proxying to:', url);
     console.log('[Notion API] Token exists:', !!NOTION_TOKEN);
