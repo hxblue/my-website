@@ -2,8 +2,8 @@ import type { BlogMeta, BlogPost } from '../types/blog';
 
 const NOTION_TOKEN = import.meta.env.VITE_NOTION_TOKEN;
 const DATABASE_ID = import.meta.env.VITE_NOTION_DATABASE_ID;
-// 开发环境使用代理，生产环境使用直接 API
-const NOTION_API_URL = import.meta.env.DEV ? '/notion-api' : 'https://api.notion.com/v1';
+// 开发环境使用 Vite 代理，生产环境使用 Vercel API 路由
+const NOTION_API_URL = import.meta.env.DEV ? '/notion-api' : '/api/notion';
 
 /**
  * 检查 Notion 是否已配置
@@ -37,12 +37,22 @@ function extractTags(tagsProperty: any): string[] {
  */
 async function notionFetch(endpoint: string, options: RequestInit = {}) {
   const url = `${NOTION_API_URL}${endpoint}`;
+
+  // 开发环境直接请求，需要 Token；生产环境走 Vercel Function
+  const isDev = import.meta.env.DEV;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (isDev) {
+    headers['Authorization'] = `Bearer ${NOTION_TOKEN}`;
+    headers['Notion-Version'] = '2022-06-28';
+  }
+
   const response = await fetch(url, {
     ...options,
     headers: {
-      'Authorization': `Bearer ${NOTION_TOKEN}`,
-      'Notion-Version': '2022-06-28',
-      'Content-Type': 'application/json',
+      ...headers,
       ...options.headers,
     },
   });
@@ -51,7 +61,6 @@ async function notionFetch(endpoint: string, options: RequestInit = {}) {
     const errorText = await response.text();
     console.error('Notion API error:', response.status, errorText);
     console.error('Request URL:', url);
-    console.error('Request body:', options.body);
     throw new Error(`Notion API error: ${response.status} - ${errorText}`);
   }
 
