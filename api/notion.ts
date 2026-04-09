@@ -15,17 +15,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // 使用 req.query.path 获取动态路由参数
-    const pathSegments = req.query.path as string[] || [];
-    const notionPath = pathSegments.join('/');
+    // 从查询参数获取 Notion API 路径
+    const notionPath = req.query.notionPath as string;
 
     if (!notionPath) {
-      return res.status(400).json({ error: 'Path is required' });
+      return res.status(400).json({ error: 'notionPath query parameter is required' });
     }
 
     const targetUrl = `${NOTION_API_URL}/${notionPath}`;
 
-    console.log('[Notion API] Path:', notionPath);
+    console.log('[Notion API] notionPath:', notionPath);
     console.log('[Notion API] Target URL:', targetUrl);
 
     // 转发请求到 Notion API

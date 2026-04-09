@@ -36,10 +36,20 @@ function extractTags(tagsProperty: any): string[] {
  * 调用 Notion API
  */
 async function notionFetch(endpoint: string, options: RequestInit = {}) {
-  const url = `${NOTION_API_URL}${endpoint}`;
+  const isDev = import.meta.env.DEV;
+
+  // 构建 URL
+  // 开发环境: /notion-api/databases/xxx/query
+  // 生产环境: /api/notion?notionPath=databases/xxx/query
+  let url: string;
+  if (isDev) {
+    url = `${NOTION_API_URL}${endpoint}`;
+  } else {
+    const notionPath = endpoint.replace(/^\//, '');
+    url = `${NOTION_API_URL}?notionPath=${encodeURIComponent(notionPath)}`;
+  }
 
   // 开发环境直接请求，需要 Token；生产环境走 Vercel Function
-  const isDev = import.meta.env.DEV;
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
