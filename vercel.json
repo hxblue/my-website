@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/notion/:path*", "destination": "/api/notion" },
     { "source": "/blog/:slug", "destination": "/index.html" },
     { "source": "/blog", "destination": "/index.html" }
   ]
