@@ -10,4 +10,14 @@ export default defineConfig({
       include: ['buffer'],
     }),
   ],
+  server: {
+    proxy: {
+      // 代理 Notion API 请求，避免 CORS 问题
+      '/notion-api': {
+        target: 'https://api.notion.com/v1',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/notion-api/, ''),
+      },
+    },
+  },
 })
