@@ -18,4 +18,5 @@ export const skills: string[] = [
   'MongoDB',
   'AWS',
   'Figma',
+  'Codex',
 ]

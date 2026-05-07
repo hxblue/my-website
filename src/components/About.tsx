@@ -48,8 +48,9 @@ const About = () => {
                 热爱代码，追求卓越的开发者
               </h3>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                我是一名充满热情的全栈开发者，拥有多年的 Web 开发经验。
+                我是一名充满热情的全栈开发者，目前是还在寻找一份实习的阶段。
                 我专注于创建美观、高性能的应用程序，注重用户体验和代码质量。
+                我希望能在AI时代不断进行学习并得到成长！！！
               </p>
               <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                 在工作中，我喜欢探索新技术，不断学习成长。我相信好的代码不仅要能运行，
