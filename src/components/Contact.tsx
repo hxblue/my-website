@@ -29,28 +29,28 @@ const Contact = () => {
   const contactLinks = [
     {
       name: '邮箱',
-      value: 'developer@example.com',
+      value: 'wanglemao03@gmail.com',
       icon: Mail,
-      href: 'mailto:developer@example.com',
+      href: 'mailto:wanglemao03@gmail.com',
     },
     {
       name: 'GitHub',
-      value: '@developer',
+      value: 'https://github.com/hxblue',
       icon: Github,
-      href: 'https://github.com/developer',
+      href: 'https://github.com/hxblue',
     },
-    {
-      name: 'LinkedIn',
-      value: 'Developer Profile',
-      icon: Mail,
-      href: 'https://linkedin.com/in/developer',
-    },
-    {
-      name: 'Twitter',
-      value: '@developer',
-      icon: Mail,
-      href: 'https://twitter.com/developer',
-    },
+    // {
+    //   name: 'LinkedIn',
+    //   value: 'Developer Profile',
+    //   icon: Mail,
+    //   href: 'https://linkedin.com/in/developer',
+    // },
+    // {
+    //   name: 'Twitter',
+    //   value: '@developer',
+    //   icon: Mail,
+    //   href: 'https://twitter.com/developer',
+    // },
   ]
 
   return (
