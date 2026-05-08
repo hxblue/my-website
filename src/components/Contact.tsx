@@ -28,7 +28,7 @@ const Contact = () => {
 
   const contactLinks = [
     {
-      name: '邮箱',
+      name: '谷歌邮箱',
       value: 'wanglemao03@gmail.com',
       icon: Mail,
       href: 'mailto:wanglemao03@gmail.com',
@@ -38,6 +38,12 @@ const Contact = () => {
       value: 'https://github.com/hxblue',
       icon: Github,
       href: 'https://github.com/hxblue',
+    },
+    {
+      name: '163邮箱',
+      value: 'wanglemao03@163.com',
+      icon: Mail,
+      href: 'mailto:wanglemao03@163.com',
     },
     // {
     //   name: 'LinkedIn',
