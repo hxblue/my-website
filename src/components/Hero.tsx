@@ -37,7 +37,7 @@ const Hero = () => {
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 dark:text-white"
         >
           <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-            你好，我是开发者
+            你好，我是Chenblue
           </span>
         </motion.h1>
 
@@ -48,8 +48,11 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-12"
         >
-          热爱创造优雅的用户体验，专注于现代 Web 开发技术栈。
-          致力于构建高性能、可扩展的应用程序。
+          希望能在AI时代不断学习，找到自己感兴趣的事物，并为之努力，
+          最终创造出优秀的产品，让世界更加美好！
+          纵有疾风起来，人生不言弃。
+
+          
         </motion.p>
 
         {/* CTA 按钮 */}
