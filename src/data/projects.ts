@@ -18,12 +18,12 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 1,
-    name: '电商平台',
-    description: '一个功能完善的在线购物平台，支持商品浏览、购物车、订单管理等功能。采用现代化设计，用户体验流畅。',
+    name: '个人作品集网站',
+    description: '基于 React、TypeScript、Tailwind CSS 构建的个人作品集，集成博客、评论和深浅色主题切换。',
     image: '🛒',
-    techStack: ['React', 'TypeScript', 'Node.js', 'MongoDB', 'Tailwind CSS'],
-    githubUrl: 'https://github.com/example/ecommerce',
-    liveUrl: 'https://ecommerce-demo.example.com',
+    techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Vercel'],
+    githubUrl: 'https://github.com/hxblue/my-website',
+    liveUrl: 'https://my-website-two-mauve-11.vercel.app',
   },
   {
     id: 2,
