@@ -1,34 +1,48 @@
 import { Link } from 'react-router-dom';
 import type { BlogMeta } from '../types/blog';
-import { Calendar, Tag } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, Tag } from 'lucide-react';
 
 interface BlogCardProps {
   blog: BlogMeta;
 }
 
+const formatDate = (date: string) =>
+  new Date(date).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
+
 const BlogCard = ({ blog }: BlogCardProps) => {
   return (
     <Link
       to={`/blog/${blog.slug}`}
-      className="group block bg-white dark:bg-white/5 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:scale-[1.02] shadow-sm dark:shadow-none hover:shadow-lg dark:hover:shadow-purple-500/10"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-purple-400/70 hover:shadow-xl hover:shadow-purple-500/10 dark:border-white/10 dark:bg-white/[0.04]"
     >
-      {/* Cover Image */}
-      <div className="aspect-video overflow-hidden bg-gray-200 dark:bg-gray-800">
-        <img
-          src={blog.cover}
-          alt={blog.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
+      <div className="relative aspect-[16/10] overflow-hidden bg-gray-200 dark:bg-gray-900">
+        {blog.cover ? (
+          <img
+            src={blog.cover}
+            alt={blog.title}
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="h-full w-full bg-gradient-to-br from-purple-900 via-gray-900 to-cyan-900" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent opacity-80" />
+        <span className="absolute bottom-4 left-4 rounded-full bg-black/45 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+          技术笔记
+        </span>
       </div>
 
-      {/* Content */}
-      <div className="p-6">
-        {/* Tags */}
+      <div className="flex flex-1 flex-col p-6">
         <div className="flex flex-wrap gap-2 mb-3">
           {blog.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-purple-500/20 text-purple-700 dark:text-purple-300 rounded-full"
+              className="inline-flex items-center gap-1 rounded-full bg-purple-500/10 px-2.5 py-1 text-xs font-medium text-purple-700 dark:text-purple-300"
             >
               <Tag size={12} />
               {tag}
@@ -36,20 +50,23 @@ const BlogCard = ({ blog }: BlogCardProps) => {
           ))}
         </div>
 
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-2">
+        <h3 className="mb-3 line-clamp-2 text-xl font-bold leading-snug text-gray-950 transition group-hover:text-purple-600 dark:text-white dark:group-hover:text-purple-300">
           {blog.title}
         </h3>
 
-        {/* Excerpt */}
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+        <p className="mb-6 line-clamp-3 flex-1 text-sm leading-7 text-gray-600 dark:text-gray-400">
           {blog.excerpt}
         </p>
 
-        {/* Date */}
-        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-500 text-sm">
-          <Calendar size={14} />
-          <time>{new Date(blog.date).toLocaleDateString('zh-CN')}</time>
+        <div className="flex items-center justify-between border-t border-gray-200 pt-4 text-sm dark:border-white/10">
+          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-500">
+            <CalendarDays size={15} />
+            <time dateTime={blog.date}>{formatDate(blog.date)}</time>
+          </div>
+          <span className="inline-flex items-center gap-1 font-medium text-purple-600 dark:text-purple-300">
+            阅读
+            <ArrowUpRight size={16} className="transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
         </div>
       </div>
     </Link>
