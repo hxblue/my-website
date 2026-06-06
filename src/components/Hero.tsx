@@ -1,98 +1,115 @@
-import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { motion } from 'framer-motion';
+import { ArrowDownRight, ArrowRight, Github, Sparkles } from 'lucide-react';
+
+const focusItems = [
+  { label: '当前目标', value: '寻找前端 / 全栈开发实习' },
+  { label: '正在关注', value: 'AI 应用、React 与产品体验' },
+];
 
 /**
- * 首页英雄区组件
- * 展示大标题、简介和头像
+ * 首页首屏：用真实项目页面作为背景，并明确表达身份、目标和行动入口。
  */
 const Hero = () => {
   return (
-    <section className="min-h-screen flex items-center justify-center relative px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50 dark:from-transparent dark:to-transparent">
-      {/* 背景渐变装饰 */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl" />
-      </div>
+    <section className="relative flex min-h-[88svh] items-end overflow-hidden bg-[#080808] px-4 pb-8 pt-24 text-white sm:min-h-[92svh] sm:px-6 sm:pb-16 sm:pt-28 lg:px-8">
+      <div
+        className="absolute inset-0 bg-cover bg-center opacity-10 sm:opacity-20"
+        style={{ backgroundImage: "url('/images/projects/portfolio-blog.png')" }}
+      />
+      <div className="absolute inset-0 bg-black/70 sm:bg-black/65" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/70 to-[#080808]/25" />
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        {/* 头像 */}
+      <div className="relative mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+        <div>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-6 flex flex-wrap items-center gap-3 text-sm"
+          >
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-emerald-200">
+              <span className="h-2 w-2 rounded-full bg-emerald-400" />
+              Open to internship
+            </span>
+            <span className="inline-flex items-center gap-2 text-white/60">
+              <Sparkles size={15} />
+              Full-stack developer · AI product explorer
+            </span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="max-w-5xl text-4xl font-bold leading-[1.08] text-white sm:text-6xl lg:text-7xl"
+          >
+            把想法做成
+            <span className="block text-purple-300">真正可用的产品。</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-6 max-w-2xl text-base leading-8 text-white/70 sm:text-lg"
+          >
+            你好，我是 Chenblue。一名正在寻找实习机会的全栈开发者，喜欢从真实问题出发，
+            用 Web 技术和 AI 能力完成可以访问、可以体验、可以持续迭代的产品。
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-8 flex flex-wrap gap-3"
+          >
+            <a
+              href="#projects"
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-gray-950 transition hover:bg-purple-100"
+            >
+              查看精选项目
+              <ArrowRight size={17} />
+            </a>
+            <a
+              href="https://github.com/hxblue"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              <Github size={17} />
+              GitHub
+            </a>
+          </motion.div>
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="border-l border-white/15 pl-5 sm:pl-7"
         >
-          <div className="w-32 h-32 sm:w-40 sm:h-40 mx-auto rounded-full bg-gradient-to-br from-purple-400 to-pink-400 p-1">
-            <div className="w-full h-full rounded-full bg-white dark:bg-[#0a0a0a] flex items-center justify-center">
-              <span className="text-4xl sm:text-5xl">👋</span>
-            </div>
+          <p className="mb-5 font-mono text-xs uppercase text-purple-300">
+            developer_status.json
+          </p>
+          <div className="grid grid-cols-2 gap-4 sm:block sm:space-y-5">
+            {focusItems.map((item) => (
+              <div key={item.label}>
+                <p className="text-xs text-white/40">{item.label}</p>
+                <p className="mt-1 text-sm font-medium text-white/85">{item.value}</p>
+              </div>
+            ))}
           </div>
-        </motion.div>
-
-        {/* 标题 */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 dark:text-white"
-        >
-          <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-            你好，我是Chenblue
-          </span>
-        </motion.h1>
-
-        {/* 简介 */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-12"
-        >
-          希望能在AI时代不断学习，找到自己感兴趣的事物，并为之努力，
-          最终创造出优秀的产品，让世界更加美好！
-          纵有疾风起来，人生不言弃。
-
-          
-        </motion.p>
-
-        {/* CTA 按钮 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
           <a
-            href="#projects"
-            className="px-8 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-medium hover:opacity-90 transition-opacity duration-200 shadow-lg shadow-purple-500/25"
+            href="#about"
+            className="mt-7 inline-flex items-center gap-2 text-sm text-white/55 transition hover:text-white"
           >
-            查看作品
-          </a>
-          <a
-            href="#contact"
-            className="px-8 py-3 rounded-full border border-gray-300 dark:border-white/20 text-gray-700 dark:text-white font-medium hover:bg-gray-100 dark:hover:bg-white/10 transition-colors duration-200"
-          >
-            联系我
+            继续了解我
+            <ArrowDownRight size={17} />
           </a>
         </motion.div>
       </div>
-
-      {/* 滚动提示 */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <ChevronDown className="text-gray-400 dark:text-gray-500" size={24} />
-        </motion.div>
-      </motion.div>
     </section>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

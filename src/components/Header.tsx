@@ -20,7 +20,7 @@ const Header = () => {
   const isHomePage = location.pathname === '/';
 
   const navLinks = [
-    { name: '关于', href: '/#about', isAnchor: true },
+    { name: '能力', href: '/#about', isAnchor: true },
     { name: '项目', href: '/#projects', isAnchor: true },
     { name: '博客', href: '/blog', isAnchor: false },
     { name: '联系', href: '/#contact', isAnchor: true },
@@ -49,7 +49,7 @@ const Header = () => {
           {/* Logo */}
           <Link
             to="/"
-            className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent"
+            className="text-xl font-bold text-purple-600 dark:text-purple-300"
           >
             Chenblue
           </Link>

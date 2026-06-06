@@ -1,24 +1,14 @@
-/**
- * 页脚组件
- * 简单的版权信息展示
- */
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-gray-200 dark:border-white/10 bg-white dark:bg-transparent">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-gray-500 dark:text-gray-500 text-sm">
-          © {currentYear} Developer. All rights reserved.
-        </p>
-        <p className="text-gray-400 dark:text-gray-600 text-sm">
-          Made with{' '}
-          <span className="text-purple-500 dark:text-purple-400">♥</span>
-          {' '}using React & Tailwind CSS
-        </p>
+    <footer className="border-t border-white/10 bg-gray-950 px-4 py-8 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
+        <p>© {currentYear} Chenblue. Built through learning and iteration.</p>
+        <p>React · TypeScript · Tailwind CSS · Vercel</p>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

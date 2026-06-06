@@ -1,82 +1,93 @@
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { skills } from '../data/skills'
+import { motion, useInView } from 'framer-motion';
+import { Bot, Database, MonitorSmartphone, Rocket } from 'lucide-react';
+import { useRef } from 'react';
+import { skillGroups } from '../data/skills';
+
+const groupIcons = [MonitorSmartphone, Database, Bot, Rocket];
 
 /**
- * 关于我组件
- * 展示详细介绍和技能列表
+ * 将技能从标签墙改为围绕产品交付过程组织的能力分组。
  */
 const About = () => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="about" className="py-24 px-4 sm:px-6 lg:px-8" ref={ref}>
-      <div className="max-w-6xl mx-auto">
+    <section id="about" ref={ref} className="px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6 }}
+          className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]"
         >
-          {/* Section Title */}
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-white">关于我</h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full" />
-          </motion.div>
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <p className="font-mono text-xs uppercase text-purple-600 dark:text-purple-300">
+              01 / Capabilities
+            </p>
+            <h2 className="mt-4 text-3xl font-bold leading-tight text-gray-950 dark:text-white sm:text-4xl">
+              从问题到上线，
+              <span className="block text-gray-500 dark:text-gray-400">关注完整的产品过程。</span>
+            </h2>
+            <p className="mt-6 max-w-md text-base leading-8 text-gray-600 dark:text-gray-400">
+              我还在持续学习，但已经习惯用项目验证技术：先理解需求，再完成界面、数据连接、部署和迭代，
+              让每一次练习都尽可能接近真实产品。
+            </p>
 
-          {/* Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* 介绍文本 */}
-            <motion.div variants={itemVariants} className="space-y-6">
-              <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-                热爱代码，追求卓越的开发者
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                我是一名充满热情的全栈开发者，目前是还在寻找一份实习的阶段。
-                我专注于创建美观、高性能的应用程序，注重用户体验和代码质量。
-                我希望能在AI时代不断进行学习并得到成长！！！
-              </p>
-              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-                在工作中，我喜欢探索新技术，不断学习成长。我相信好的代码不仅要能运行，
-                还要易于维护和扩展。团队合作中，我乐于分享知识，与同事们共同进步。
-              </p>
-            </motion.div>
-
-            {/* 技能列表 */}
-            <motion.div variants={itemVariants}>
-              <h3 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200">技术栈</h3>
-              <div className="flex flex-wrap gap-3">
-                {skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="px-4 py-2 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 text-sm hover:bg-gray-200 dark:hover:bg-white/10 hover:border-purple-500/50 transition-all duration-200"
-                  >
-                    {skill}
-                  </span>
-                ))}
+            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-7 border-t border-gray-200 pt-7 dark:border-white/10">
+              <div>
+                <dt className="text-xs text-gray-500">当前阶段</dt>
+                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">寻找开发实习</dd>
               </div>
-            </motion.div>
+              <div>
+                <dt className="text-xs text-gray-500">工作方式</dt>
+                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">构建中学习</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-gray-500">关注方向</dt>
+                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">AI + Web 产品</dd>
+              </div>
+              <div>
+                <dt className="text-xs text-gray-500">交付习惯</dt>
+                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">上线与复盘</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="grid gap-px overflow-hidden rounded-2xl border border-gray-200 bg-gray-200 dark:border-white/10 dark:bg-white/10 sm:grid-cols-2">
+            {skillGroups.map((group, index) => {
+              const Icon = groupIcons[index];
+
+              return (
+                <article
+                  key={group.title}
+                  className="bg-white p-6 dark:bg-[#101010] sm:p-8"
+                >
+                  <Icon className="text-purple-600 dark:text-purple-300" size={24} />
+                  <h3 className="mt-6 text-xl font-bold text-gray-950 dark:text-white">
+                    {group.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-gray-400">
+                    {group.description}
+                  </p>
+                  <ul className="mt-6 flex flex-wrap gap-2">
+                    {group.skills.map((skill) => (
+                      <li
+                        key={skill}
+                        className="rounded-md bg-gray-100 px-2.5 py-1.5 text-xs font-medium text-gray-600 dark:bg-white/5 dark:text-gray-300"
+                      >
+                        {skill}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              );
+            })}
           </div>
         </motion.div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default About
+export default About;

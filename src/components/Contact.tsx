@@ -1,117 +1,79 @@
-import { motion } from 'framer-motion'
-import { useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Mail, Github } from 'lucide-react'
+import { motion, useInView } from 'framer-motion';
+import { ArrowUpRight, Github, Mail } from 'lucide-react';
+import { useRef } from 'react';
 
-/**
- * 联系方式组件
- * 展示邮箱、GitHub、社交媒体链接
- */
+const contactLinks = [
+  {
+    label: 'GitHub',
+    value: 'github.com/hxblue',
+    href: 'https://github.com/hxblue',
+    icon: Github,
+  },
+  {
+    label: 'Google 邮箱',
+    value: 'wanglemao03@gmail.com',
+    href: 'mailto:wanglemao03@gmail.com',
+    icon: Mail,
+  },
+  {
+    label: '163 邮箱',
+    value: 'wanglemao03@163.com',
+    href: 'mailto:wanglemao03@163.com',
+    icon: Mail,
+  },
+];
+
 const Contact = () => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
-
-  const contactLinks = [
-    {
-      name: '谷歌邮箱',
-      value: 'wanglemao03@gmail.com',
-      icon: Mail,
-      href: 'mailto:wanglemao03@gmail.com',
-    },
-    {
-      name: 'GitHub',
-      value: 'https://github.com/hxblue',
-      icon: Github,
-      href: 'https://github.com/hxblue',
-    },
-    {
-      name: '163邮箱',
-      value: 'wanglemao03@163.com',
-      icon: Mail,
-      href: 'mailto:wanglemao03@163.com',
-    },
-    // {
-    //   name: 'LinkedIn',
-    //   value: 'Developer Profile',
-    //   icon: Mail,
-    //   href: 'https://linkedin.com/in/developer',
-    // },
-    // {
-    //   name: 'Twitter',
-    //   value: '@developer',
-    //   icon: Mail,
-    //   href: 'https://twitter.com/developer',
-    // },
-  ]
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8" ref={ref}>
-      <div className="max-w-4xl mx-auto">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-        >
-          {/* Section Title */}
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-gray-900 dark:text-white">联系方式</h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-purple-400 to-pink-400 mx-auto rounded-full" />
-            <p className="mt-4 text-gray-600 dark:text-gray-400">
-              有合作意向或想了解更多？欢迎随时联系我
-            </p>
-          </motion.div>
+    <section
+      id="contact"
+      ref={ref}
+      className="border-t border-gray-200 bg-gray-950 px-4 py-24 text-white dark:border-white/10 sm:px-6 lg:px-8"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.6 }}
+        className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_480px] lg:items-end"
+      >
+        <div>
+          <p className="font-mono text-xs uppercase text-purple-300">04 / Contact</p>
+          <h2 className="mt-5 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">
+            正在寻找可以一起
+            <span className="block text-purple-300">学习、构建和成长的机会。</span>
+          </h2>
+          <p className="mt-6 max-w-2xl text-base leading-8 text-white/60">
+            如果你正在寻找愿意快速学习、重视产品体验并且乐于把事情真正做出来的开发者，欢迎联系我。
+          </p>
+        </div>
 
-          {/* Contact Cards */}
-          <motion.div
-            variants={itemVariants}
-            className="grid sm:grid-cols-2 gap-6"
-          >
-            {contactLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                target={link.href.startsWith('http') ? '_blank' : undefined}
-                rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="group flex items-center gap-4 p-6 rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:border-purple-500/30 hover:bg-gray-50 dark:hover:bg-white/10 transition-all duration-300 shadow-sm dark:shadow-none"
-              >
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300">
-                  <link.icon className="text-purple-500 dark:text-purple-400" size={24} />
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500 dark:text-gray-500 mb-1">{link.name}</p>
-                  <p className="text-gray-900 dark:text-white font-medium group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                    {link.value}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </motion.div>
-
-          {/* CTA */}
-          <motion.div variants={itemVariants} className="text-center mt-16">
-            <p className="text-gray-500 dark:text-gray-500 text-sm">
-              期待与您的合作
-            </p>
-          </motion.div>
-        </motion.div>
-      </div>
+        <div className="divide-y divide-white/10 border-y border-white/10">
+          {contactLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              className="group flex items-center gap-4 py-5"
+            >
+              <link.icon className="text-purple-300" size={20} />
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-white/40">{link.label}</p>
+                <p className="mt-1 truncate text-sm font-medium text-white/85">{link.value}</p>
+              </div>
+              <ArrowUpRight
+                size={18}
+                className="text-white/40 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white"
+              />
+            </a>
+          ))}
+        </div>
+      </motion.div>
     </section>
-  )
-}
+  );
+};
 
-export default Contact
+export default Contact;
