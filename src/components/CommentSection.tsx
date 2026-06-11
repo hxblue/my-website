@@ -10,15 +10,13 @@ export default function CommentSection({ blogSlug }: CommentSectionProps) {
   const { comments, isLoading, error, submitComment } = useComments(blogSlug);
 
   return (
-    <section className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        留言板
-      </h2>
+    <section className="mt-12 border-t border-line pt-10">
+      <h2 className="font-serif text-4xl font-medium">留言</h2>
 
-      <div className="space-y-8">
+      <div className="mt-8 space-y-8">
         <CommentForm onSubmit={submitComment} />
 
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+        <div className="border-t border-line pt-6">
           <CommentList comments={comments} isLoading={isLoading} error={error} />
         </div>
       </div>

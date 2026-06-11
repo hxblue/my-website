@@ -1,91 +1,56 @@
-import type { BlogPost } from '../types/blog';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { type Components } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Calendar, Tag, ArrowLeft } from 'lucide-react';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
+import type { BlogPost } from '../types/blog';
+import { useTheme } from '../hooks/useTheme';
 
 interface BlogDetailProps {
   post: BlogPost;
 }
 
 const BlogDetail = ({ post }: BlogDetailProps) => {
+  const { theme } = useTheme();
+  const markdownComponents = useMemo<Components>(
+    () => ({
+      code({ className, children, ...props }) {
+        const match = /language-(\w+)/.exec(className || '');
+
+        return match ? (
+          <SyntaxHighlighter style={theme === 'dark' ? oneDark : oneLight} language={match[1]} PreTag="div">
+            {String(children).replace(/\n$/, '')}
+          </SyntaxHighlighter>
+        ) : (
+          <code className={className} {...props}>
+            {children}
+          </code>
+        );
+      },
+    }),
+    [theme],
+  );
+
   return (
-    <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Back Link */}
-      <Link
-        to="/blog"
-        className="inline-flex items-center gap-2 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors mb-8"
-      >
-        <ArrowLeft size={20} />
-        返回博客列表
+    <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+      <Link to="/blog" className="editorial-link text-sm">
+        ← 返回博客列表
       </Link>
 
-      {/* Header */}
-      <header className="mb-8">
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="inline-flex items-center gap-1 px-3 py-1 text-sm bg-purple-500/20 text-purple-700 dark:text-purple-300 rounded-full"
-            >
-              <Tag size={14} />
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Title */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-          {post.title}
-        </h1>
-
-        {/* Date */}
-        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-          <Calendar size={18} />
-          <time>{new Date(post.date).toLocaleDateString('zh-CN', {
+      <header className="mt-14 border-b border-line pb-10">
+        <p className="meta-label">{post.tags.join(' · ')}</p>
+        <h1 className="mt-5 font-serif text-5xl font-semibold leading-[1.08] sm:text-7xl">{post.title}</h1>
+        <time dateTime={post.date} className="mt-6 block font-mono text-sm text-muted">
+          {new Date(post.date).toLocaleDateString('zh-CN', {
             year: 'numeric',
             month: 'long',
-            day: 'numeric'
-          })}</time>
-        </div>
+            day: 'numeric',
+          })}
+        </time>
       </header>
 
-      {/* Cover Image */}
-      <div className="aspect-video rounded-xl overflow-hidden mb-8 bg-gray-200 dark:bg-gray-800">
-        <img
-          src={post.cover}
-          alt={post.title}
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      {/* Content */}
-      <div className="prose prose-lg max-w-none dark:prose-invert">
-        <ReactMarkdown
-          components={{
-            code({ node, inline, className, children, ...props }: any) {
-              const match = /language-(\w+)/.exec(className || '');
-              return !inline && match ? (
-                <SyntaxHighlighter
-                  style={oneDark}
-                  language={match[1]}
-                  PreTag="div"
-                  {...props}
-                >
-                  {String(children).replace(/\n$/, '')}
-                </SyntaxHighlighter>
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        >
-          {post.content}
-        </ReactMarkdown>
+      <div className="prose prose-lg mt-12 max-w-none">
+        <ReactMarkdown components={markdownComponents}>{post.content}</ReactMarkdown>
       </div>
     </article>
   );

@@ -6,7 +6,6 @@ import { getPostBySlug } from '../api/posts';
 import { blogs as fallbackBlogs } from '../data/blogs';
 import { postsMap as fallbackPostsMap } from '../data/postsMap';
 import matter from 'gray-matter';
-import { Loader2 } from 'lucide-react';
 import type { BlogPost } from '../types/blog';
 
 const BlogPostPage = () => {
@@ -25,13 +24,11 @@ const BlogPostPage = () => {
       try {
         setLoading(true);
 
-        // 首先尝试从 Notion 获取
         const notionPost = await getPostBySlug(slug);
 
         if (notionPost) {
           setPost(notionPost);
         } else {
-          // 回退到本地数据
           const fallbackPost = getFallbackPost(slug);
           if (fallbackPost) {
             setPost(fallbackPost);
@@ -41,7 +38,6 @@ const BlogPostPage = () => {
         }
       } catch (err) {
         console.error('Error fetching post:', err);
-        // 出错时尝试回退
         const fallbackPost = getFallbackPost(slug);
         if (fallbackPost) {
           setPost(fallbackPost);
@@ -56,7 +52,6 @@ const BlogPostPage = () => {
     fetchPost();
   }, [slug]);
 
-  // 获取本地回退文章
   const getFallbackPost = (slug: string): BlogPost | null => {
     const meta = fallbackBlogs.find(b => b.slug === slug);
     if (!meta) return null;
@@ -79,20 +74,18 @@ const BlogPostPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white pt-20 px-4 transition-colors duration-300">
-        <div className="max-w-4xl mx-auto flex justify-center items-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
-        </div>
+      <div className="min-h-screen px-4 pt-32">
+        <p className="mx-auto max-w-4xl font-mono text-sm text-muted">Loading article...</p>
       </div>
     );
   }
 
   if (error && !post) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white pt-20 px-4 transition-colors duration-300">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl text-red-500 mb-4">Error loading post</h1>
-          <p className="text-gray-600 dark:text-gray-400">{error}</p>
+      <div className="min-h-screen px-4 pt-32">
+        <div className="mx-auto max-w-4xl">
+          <h1 className="font-serif text-4xl">Error loading post</h1>
+          <p className="mt-4 text-muted">{error}</p>
         </div>
       </div>
     );
@@ -103,9 +96,11 @@ const BlogPostPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-white pt-20 transition-colors duration-300">
+    <div className="min-h-screen pt-20">
       <BlogDetail post={post} />
-      {slug && <CommentSection blogSlug={slug} />}
+      <div className="mx-auto max-w-4xl px-4 pb-20 sm:px-6 lg:px-8">
+        {slug && <CommentSection blogSlug={slug} />}
+      </div>
     </div>
   );
 };

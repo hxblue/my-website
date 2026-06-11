@@ -1,90 +1,56 @@
-import { motion, useInView } from 'framer-motion';
-import { Bot, Database, MonitorSmartphone, Rocket } from 'lucide-react';
-import { useRef } from 'react';
 import { skillGroups } from '../data/skills';
 
-const groupIcons = [MonitorSmartphone, Database, Bot, Rocket];
+const capabilityMeta = [
+  ['主攻方向', 'Java 后端开发'],
+  ['持续关注', 'AI 应用落地'],
+  ['前端定位', '支持项目完整呈现'],
+  ['工程实践', '部署、迭代与复盘'],
+];
 
-/**
- * 将技能从标签墙改为围绕产品交付过程组织的能力分组。
- */
 const About = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
-
   return (
-    <section id="about" ref={ref} className="px-4 py-24 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-          className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr]"
-        >
-          <div className="lg:sticky lg:top-28 lg:self-start">
-            <p className="font-mono text-xs uppercase text-purple-600 dark:text-purple-300">
-              01 / Capabilities
-            </p>
-            <h2 className="mt-4 text-3xl font-bold leading-tight text-gray-950 dark:text-white sm:text-4xl">
-              从问题到上线，
-              <span className="block text-gray-500 dark:text-gray-400">关注完整的产品过程。</span>
-            </h2>
-            <p className="mt-6 max-w-md text-base leading-8 text-gray-600 dark:text-gray-400">
-              我还在持续学习，但已经习惯用项目验证技术：先理解需求，再完成界面、数据连接、部署和迭代，
-              让每一次练习都尽可能接近真实产品。
+    <section id="about" className="editorial-section">
+      <div className="editorial-rule pt-10">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-16">
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <p className="section-kicker">01 / CAPABILITIES</p>
+            <h2 className="section-title mt-4 max-w-[560px]">技术方向与能力</h2>
+            <p className="mt-7 max-w-[560px] text-muted">
+              我目前主攻 Java 后端开发，也在学习如何把大模型能力接入实际项目。前端部分主要借助
+              AI 编程工具完成页面实现，对 React、Vue 等框架有初步了解，目标是能够独立完成从后端逻辑到上线交付的完整项目。
             </p>
 
-            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-7 border-t border-gray-200 pt-7 dark:border-white/10">
-              <div>
-                <dt className="text-xs text-gray-500">当前阶段</dt>
-                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">寻找开发实习</dd>
-              </div>
-              <div>
-                <dt className="text-xs text-gray-500">工作方式</dt>
-                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">构建中学习</dd>
-              </div>
-              <div>
-                <dt className="text-xs text-gray-500">关注方向</dt>
-                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">AI + Web 产品</dd>
-              </div>
-              <div>
-                <dt className="text-xs text-gray-500">交付习惯</dt>
-                <dd className="mt-2 font-semibold text-gray-900 dark:text-white">上线与复盘</dd>
-              </div>
+            <dl className="mt-10 grid grid-cols-2 border-t border-line">
+              {capabilityMeta.map(([label, value]) => (
+                <div key={label} className="border-b border-line py-5 pr-4">
+                  <dt className="meta-label">{label}</dt>
+                  <dd className="mt-2 text-sm font-semibold text-ink sm:text-base">{value}</dd>
+                </div>
+              ))}
             </dl>
           </div>
 
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-gray-200 bg-gray-200 dark:border-white/10 dark:bg-white/10 sm:grid-cols-2">
-            {skillGroups.map((group, index) => {
-              const Icon = groupIcons[index];
-
-              return (
-                <article
-                  key={group.title}
-                  className="bg-white p-6 dark:bg-[#101010] sm:p-8"
-                >
-                  <Icon className="text-purple-600 dark:text-purple-300" size={24} />
-                  <h3 className="mt-6 text-xl font-bold text-gray-950 dark:text-white">
-                    {group.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-gray-400">
-                    {group.description}
-                  </p>
-                  <ul className="mt-6 flex flex-wrap gap-2">
-                    {group.skills.map((skill) => (
-                      <li
-                        key={skill}
-                        className="rounded-md bg-gray-100 px-2.5 py-1.5 text-xs font-medium text-gray-600 dark:bg-white/5 dark:text-gray-300"
-                      >
-                        {skill}
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              );
-            })}
+          {/* 四组能力同时展示当前技术方向与真实学习边界。 */}
+          <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
+            {skillGroups.map((group, index) => (
+              <article key={group.title} className="bg-canvas p-6 sm:p-8">
+                <p className="section-kicker">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="mt-6 font-serif text-2xl font-medium leading-tight">{group.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-muted">{group.description}</p>
+                <ul className="mt-7 flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <li
+                      key={skill}
+                      className="border border-line bg-soft px-2.5 py-1.5 font-mono text-xs text-body"
+                    >
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

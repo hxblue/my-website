@@ -19,9 +19,9 @@ export const projects: Project[] = [
     name: '个人作品集与技术博客',
     label: '内容平台 / 个人品牌',
     description:
-      '从作品展示页逐步迭代为可持续更新的个人技术站点，整合 Notion 博客、Supabase 评论、主题切换和 Vercel 部署。',
-    image: '/images/projects/portfolio-blog.png',
-    imageAlt: 'Chenblue 技术博客页面',
+      '想做一个能“长出内容”的个人站点 → 接入 Notion 管理内容、Supabase 承载评论、Vercel 自动部署 → 已稳定运行约 2 个月，并持续迭代内容与体验。',
+    image: '/images/projects/portfolio-editorial-v2.png',
+    imageAlt: 'Chblue 当前个人作品集首页',
     status: '持续迭代',
     highlights: ['Notion 内容管理', 'Supabase 评论系统', '响应式深浅色界面'],
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Notion API', 'Supabase', 'Vercel'],
@@ -33,7 +33,7 @@ export const projects: Project[] = [
     name: 'AI 智能伴侣',
     label: 'AI 应用 / 对话体验',
     description:
-      '一个可自定义昵称与性格的 AI 伴侣 Demo，支持多轮对话、流式回复和本地会话管理，用来探索大模型能力如何成为可用产品。',
+      '想验证 LLM 长期对话的稳定性 → 完成人设配置、流式回复、会话持久化和错误降级 → 已在 Streamlit 上线，可直接访问体验。',
     image: '/images/projects/ai-partner.png',
     imageAlt: 'AI 智能伴侣 Streamlit 应用界面',
     status: '实验项目',

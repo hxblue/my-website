@@ -7,16 +7,16 @@ interface CommentItemProps {
 
 export default function CommentItem({ comment }: CommentItemProps) {
   return (
-    <div className="py-4 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
-      <div className="flex items-center justify-between mb-2">
-        <span className="font-medium text-gray-900 dark:text-white">
+    <div className="border-b border-line py-4 last:border-b-0">
+      <div className="mb-2 flex items-center justify-between gap-4">
+        <span className="font-medium">
           {comment.nickname}
         </span>
-        <span className="text-sm text-gray-500 dark:text-gray-400">
+        <span className="font-mono text-xs text-muted">
           {formatRelativeTime(comment.created_at)}
         </span>
       </div>
-      <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+      <p className="whitespace-pre-wrap text-muted">
         {comment.content}
       </p>
     </div>

@@ -15,7 +15,6 @@ export default function CommentForm({ onSubmit }: CommentFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 基本验证
     if (!nickname.trim() || !content.trim()) {
       setMessage({ type: 'error', text: '请填写昵称和留言内容' });
       return;
@@ -31,7 +30,6 @@ export default function CommentForm({ onSubmit }: CommentFormProps) {
       return;
     }
 
-    // 速率限制：30秒内只能提交一次
     const now = Date.now();
     if (now - lastSubmitTime.current < 30000) {
       setMessage({ type: 'error', text: '提交太频繁，请稍后再试' });
@@ -64,13 +62,11 @@ export default function CommentForm({ onSubmit }: CommentFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-        发表评论
-      </h3>
+      <h3 className="text-lg font-medium">发表评论</h3>
 
       <div>
-        <label htmlFor="nickname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          昵称 <span className="text-red-500">*</span>
+        <label htmlFor="nickname" className="mb-1 block text-sm text-muted">
+          昵称 <span className="text-accent">*</span>
         </label>
         <input
           type="text"
@@ -79,17 +75,14 @@ export default function CommentForm({ onSubmit }: CommentFormProps) {
           onChange={(e) => setNickname(e.target.value)}
           maxLength={50}
           placeholder="你的昵称"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                     focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                     placeholder-gray-400 dark:placeholder-gray-500"
+          className="w-full border border-line bg-surface px-4 py-3 outline-none focus:border-accent"
         />
       </div>
 
       <div>
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          留言内容 <span className="text-red-500">*</span>
-          <span className="text-xs text-gray-500 ml-2">({content.length}/500)</span>
+        <label htmlFor="content" className="mb-1 block text-sm text-muted">
+          留言内容 <span className="text-accent">*</span>
+          <span className="ml-2 text-xs">({content.length}/500)</span>
         </label>
         <textarea
           id="content"
@@ -98,21 +91,12 @@ export default function CommentForm({ onSubmit }: CommentFormProps) {
           maxLength={500}
           rows={4}
           placeholder="写下你的想法..."
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
-                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                     focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                     placeholder-gray-400 dark:placeholder-gray-500 resize-none"
+          className="w-full resize-none border border-line bg-surface px-4 py-3 outline-none focus:border-accent"
         />
       </div>
 
       {message && (
-        <div
-          className={`p-3 rounded-lg text-sm ${
-            message.type === 'success'
-              ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
-              : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
-          }`}
-        >
+        <div className={`border-l-2 p-3 text-sm ${message.type === 'success' ? 'border-[#1B7F5A]' : 'border-accent'}`}>
           {message.text}
         </div>
       )}
@@ -120,11 +104,7 @@ export default function CommentForm({ onSubmit }: CommentFormProps) {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700
-                   disabled:bg-gray-400 disabled:cursor-not-allowed
-                   text-white font-medium rounded-lg transition-colors
-                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                   dark:focus:ring-offset-gray-900"
+        className="border border-action bg-action px-6 py-2.5 text-sm font-medium text-action-text transition-colors hover:border-accent hover:bg-accent disabled:cursor-not-allowed disabled:border-[#B8B8B2] disabled:bg-[#B8B8B2]"
       >
         {isSubmitting ? '提交中...' : '发表评论'}
       </button>
