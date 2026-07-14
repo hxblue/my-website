@@ -5,6 +5,52 @@ const DATABASE_ID = import.meta.env.VITE_NOTION_DATABASE_ID;
 // 开发环境使用 Vite 代理，生产环境使用 Vercel API 路由
 const NOTION_API_URL = import.meta.env.DEV ? '/notion-api' : '/api/notion';
 
+interface NotionText {
+  plain_text?: string;
+}
+
+interface NotionProperty {
+  title?: NotionText[];
+  rich_text?: NotionText[];
+  multi_select?: Array<{ name: string }>;
+  select?: { name?: string };
+  date?: { start?: string };
+  number?: number | null;
+  checkbox?: boolean;
+  url?: string;
+}
+
+type NotionProperties = Record<string, NotionProperty | undefined>;
+
+interface NotionPage {
+  id: string;
+  properties: NotionProperties;
+}
+
+interface NotionListResponse {
+  results?: NotionPage[];
+}
+
+interface NotionBlockContent {
+  rich_text?: NotionText[];
+  language?: string;
+  external?: { url?: string };
+  file?: { url?: string };
+}
+
+type NotionBlock = { type: string } & Record<string, unknown>;
+
+interface NotionBlocksResponse {
+  results?: NotionBlock[];
+}
+
+interface NotionDatabaseResponse {
+  properties?: Record<
+    string,
+    { multi_select?: { options?: Array<{ name: string }> } } | undefined
+  >;
+}
+
 /**
  * 检查 Notion 是否已配置
  */
@@ -15,12 +61,12 @@ function isNotionConfigured(): boolean {
 /**
  * 提取标签（支持 Multi-select 和 Text 两种类型）
  */
-function extractTags(tagsProperty: any): string[] {
+function extractTags(tagsProperty?: NotionProperty): string[] {
   if (!tagsProperty) return [];
 
   // Multi-select 类型
   if (tagsProperty.multi_select) {
-    return tagsProperty.multi_select.map((tag: any) => tag.name);
+    return tagsProperty.multi_select.map((tag) => tag.name);
   }
 
   // Text 类型（逗号分隔）
@@ -32,10 +78,41 @@ function extractTags(tagsProperty: any): string[] {
   return [];
 }
 
+function extractPlainText(property?: NotionProperty): string | undefined {
+  const value = property?.rich_text?.[0]?.plain_text;
+  return typeof value === 'string' && value.trim() ? value.trim() : undefined;
+}
+
+function extractCategory(property?: NotionProperty): string | undefined {
+  const selectValue = property?.select?.name;
+  if (typeof selectValue === 'string' && selectValue.trim()) return selectValue.trim();
+  return extractPlainText(property);
+}
+
+function extractOptionalDate(property?: NotionProperty): string | undefined {
+  const value = property?.date?.start;
+  return typeof value === 'string' && value ? value : undefined;
+}
+
+function extractOptionalNumber(property?: NotionProperty): number | undefined {
+  const value = property?.number;
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : undefined;
+}
+
+function mapOptionalMetadata(properties: NotionProperties, title: string) {
+  return {
+    category: extractCategory(properties.Category),
+    updatedAt: extractOptionalDate(properties.Updated),
+    pinned: properties.Pinned?.checkbox === true,
+    readingMinutes: extractOptionalNumber(properties.ReadingTime),
+    coverAlt: extractPlainText(properties.CoverAlt) ?? title,
+  };
+}
+
 /**
  * 调用 Notion API
  */
-async function notionFetch(endpoint: string, options: RequestInit = {}) {
+async function notionFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const isDev = import.meta.env.DEV;
 
   // 构建 URL
@@ -61,6 +138,7 @@ async function notionFetch(endpoint: string, options: RequestInit = {}) {
 
   const response = await fetch(url, {
     ...options,
+    signal: options.signal ?? AbortSignal.timeout(8000),
     headers: {
       ...headers,
       ...options.headers,
@@ -74,7 +152,7 @@ async function notionFetch(endpoint: string, options: RequestInit = {}) {
     throw new Error(`Notion API error: ${response.status} - ${errorText}`);
   }
 
-  return response.json();
+  return response.json() as Promise<T>;
 }
 
 /**
@@ -87,7 +165,7 @@ export async function getPublishedPosts(): Promise<BlogMeta[]> {
   }
 
   try {
-    const response = await notionFetch(`/databases/${DATABASE_ID}/query`, {
+    const response = await notionFetch<NotionListResponse>(`/databases/${DATABASE_ID}/query`, {
       method: 'POST',
       body: JSON.stringify({
         filter: {
@@ -109,16 +187,18 @@ export async function getPublishedPosts(): Promise<BlogMeta[]> {
       return [];
     }
 
-    return response.results.map((page: any) => {
+    return response.results.map((page) => {
       const properties = page.properties;
+      const title = properties.Name?.title?.[0]?.plain_text || 'Untitled';
 
       return {
         slug: properties.Slug?.rich_text?.[0]?.plain_text || '',
-        title: properties.Name?.title?.[0]?.plain_text || 'Untitled',
+        title,
         date: properties.Date?.date?.start || new Date().toISOString().split('T')[0],
         cover: properties.Cover?.url || '',
         tags: extractTags(properties.Tags),
         excerpt: properties.Excerpt?.rich_text?.[0]?.plain_text || '',
+        ...mapOptionalMetadata(properties, title),
       };
     });
   } catch (error) {
@@ -132,7 +212,7 @@ export async function getPublishedPosts(): Promise<BlogMeta[]> {
  */
 async function getPageBlocks(pageId: string): Promise<string> {
   try {
-    const response = await notionFetch(`/blocks/${pageId}/children`);
+    const response = await notionFetch<NotionBlocksResponse>(`/blocks/${pageId}/children`);
     return blocksToMarkdown(response.results || []);
   } catch (error) {
     console.error('Error fetching page blocks:', error);
@@ -143,10 +223,11 @@ async function getPageBlocks(pageId: string): Promise<string> {
 /**
  * 将 Notion blocks 转换为 Markdown
  */
-function blocksToMarkdown(blocks: any[]): string {
+function blocksToMarkdown(blocks: NotionBlock[]): string {
   return blocks.map((block) => {
     const type = block.type;
-    const blockContent = block[type];
+    const blockContent = block[type] as NotionBlockContent | undefined;
+    if (!blockContent) return '';
 
     switch (type) {
       case 'paragraph':
@@ -179,9 +260,10 @@ function blocksToMarkdown(blocks: any[]): string {
       case 'divider':
         return '---';
 
-      case 'image':
+      case 'image': {
         const imageUrl = blockContent.external?.url || blockContent.file?.url || '';
         return imageUrl ? `![image](${imageUrl})` : '';
+      }
 
       default:
         return '';
@@ -192,7 +274,7 @@ function blocksToMarkdown(blocks: any[]): string {
 /**
  * 从 rich_text 中提取纯文本
  */
-function extractText(richText: any[]): string {
+function extractText(richText?: NotionText[]): string {
   if (!richText || !Array.isArray(richText)) return '';
   return richText.map((text) => text.plain_text || '').join('');
 }
@@ -208,7 +290,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 
   try {
 
-    const response = await notionFetch(`/databases/${DATABASE_ID}/query`, {
+    const response = await notionFetch<NotionListResponse>(`/databases/${DATABASE_ID}/query`, {
       method: 'POST',
       body: JSON.stringify({
         filter: {
@@ -237,18 +319,20 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     const page = response.results[0];
     const properties = page.properties;
     const pageId = page.id;
+    const title = properties.Name?.title?.[0]?.plain_text || 'Untitled';
 
     // 从页面 blocks 获取内容
     const content = await getPageBlocks(pageId);
 
     return {
       slug,
-      title: properties.Name?.title?.[0]?.plain_text || 'Untitled',
+      title,
       date: properties.Date?.date?.start || new Date().toISOString().split('T')[0],
       cover: properties.Cover?.url || '',
       tags: extractTags(properties.Tags),
       excerpt: properties.Excerpt?.rich_text?.[0]?.plain_text || '',
       content,
+      ...mapOptionalMetadata(properties, title),
     };
   } catch (error) {
     console.error('Error fetching post from Notion:', error);
@@ -265,11 +349,11 @@ export async function getAllTags(): Promise<string[]> {
   }
 
   try {
-    const response = await notionFetch(`/databases/${DATABASE_ID}`);
+    const response = await notionFetch<NotionDatabaseResponse>(`/databases/${DATABASE_ID}`);
 
     const tagsProperty = response.properties?.Tags;
     if (tagsProperty?.multi_select?.options) {
-      return tagsProperty.multi_select.options.map((tag: any) => tag.name);
+      return tagsProperty.multi_select.options.map((tag) => tag.name);
     }
 
     return [];

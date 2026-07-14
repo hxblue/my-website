@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { getPublishedPosts } from '../api/posts';
-import { blogs as fallbackBlogs } from '../data/blogs';
-import type { BlogMeta } from '../types/blog';
+import { usePublishedPosts } from '../hooks/usePublishedPosts';
+import { sortPostsByDate } from '../utils/blog';
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString('zh-CN', {
@@ -12,27 +11,10 @@ const formatDate = (date: string) =>
   });
 
 const LatestPosts = () => {
-  const [posts, setPosts] = useState<BlogMeta[]>(fallbackBlogs);
-
-  useEffect(() => {
-    let isActive = true;
-
-    getPublishedPosts().then((notionPosts) => {
-      if (isActive && notionPosts.length > 0) {
-        setPosts(notionPosts);
-      }
-    });
-
-    return () => {
-      isActive = false;
-    };
-  }, []);
+  const { posts } = usePublishedPosts();
 
   const latestPosts = useMemo(
-    () =>
-      [...posts]
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-        .slice(0, 3),
+    () => sortPostsByDate(posts).slice(0, 3),
     [posts]
   );
 

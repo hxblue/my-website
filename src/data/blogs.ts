@@ -8,6 +8,11 @@ export const blogs: BlogMeta[] = [
     cover: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800',
     tags: ['随笔', '开始'],
     excerpt: '欢迎来到我的博客！这里将记录我的学习历程和技术分享。',
+    category: '随笔',
+    updatedAt: '2025-04-08',
+    pinned: true,
+    readingMinutes: 2,
+    coverAlt: '桌面上的笔记本电脑、咖啡和笔记本',
   },
 ];
 

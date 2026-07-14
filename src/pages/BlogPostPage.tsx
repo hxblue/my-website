@@ -1,107 +1,52 @@
-import { useParams, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import BlogDetail from '../components/BlogDetail';
 import CommentSection from '../components/CommentSection';
-import { getPostBySlug } from '../api/posts';
-import { blogs as fallbackBlogs } from '../data/blogs';
-import { postsMap as fallbackPostsMap } from '../data/postsMap';
-import matter from 'gray-matter';
-import type { BlogPost } from '../types/blog';
+import ArticleHero from '../components/blog/ArticleHero';
+import { useBlogPost } from '../hooks/useBlogPost';
+import { usePageMeta } from '../hooks/usePageMeta';
+import { estimateReadingMinutes } from '../utils/blog';
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { post, status } = useBlogPost(slug);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      if (!slug) {
-        setLoading(false);
-        return;
-      }
+  usePageMeta({
+    title: post ? `${post.title} | Chblue` : status === 'not-found' ? '文章未找到 | Chblue' : '正在加载文章 | Chblue',
+    description: post?.excerpt ?? 'Chblue 的工程实践与学习笔记。',
+    image: post?.cover,
+  });
 
-      try {
-        setLoading(true);
-
-        const notionPost = await getPostBySlug(slug);
-
-        if (notionPost) {
-          setPost(notionPost);
-        } else {
-          const fallbackPost = getFallbackPost(slug);
-          if (fallbackPost) {
-            setPost(fallbackPost);
-          } else {
-            setPost(null);
-          }
-        }
-      } catch (err) {
-        console.error('Error fetching post:', err);
-        const fallbackPost = getFallbackPost(slug);
-        if (fallbackPost) {
-          setPost(fallbackPost);
-        } else {
-          setError('加载文章失败');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPost();
-  }, [slug]);
-
-  const getFallbackPost = (slug: string): BlogPost | null => {
-    const meta = fallbackBlogs.find(b => b.slug === slug);
-    if (!meta) return null;
-
-    const content = fallbackPostsMap[slug];
-    if (!content) return null;
-
-    const parsed = matter(content);
-
-    return {
-      slug,
-      title: parsed.data.title || meta.title,
-      date: parsed.data.date || meta.date,
-      cover: parsed.data.cover || meta.cover,
-      tags: parsed.data.tags || meta.tags,
-      excerpt: parsed.data.excerpt || meta.excerpt,
-      content: parsed.content,
-    };
-  };
-
-  if (loading) {
+  if (status === 'loading') {
     return (
-      <div className="min-h-screen px-4 pt-32">
-        <p className="mx-auto max-w-4xl font-mono text-sm text-muted">Loading article...</p>
-      </div>
+      <main className="blog-status-page" aria-live="polite">
+        <p className="blog-eyebrow">LOADING ARTICLE</p>
+        <h1>正在加载文章</h1>
+        <div className="blog-loading-bar" aria-hidden="true" />
+      </main>
     );
   }
 
-  if (error && !post) {
+  if (status === 'not-found' || !post) {
     return (
-      <div className="min-h-screen px-4 pt-32">
-        <div className="mx-auto max-w-4xl">
-          <h1 className="font-serif text-4xl">Error loading post</h1>
-          <p className="mt-4 text-muted">{error}</p>
-        </div>
-      </div>
+      <main className="blog-status-page">
+        <p className="blog-eyebrow">404 · NOT FOUND</p>
+        <h1>没有找到这篇文章</h1>
+        <p>文章可能已经移动，或者当前地址不完整。</p>
+        <Link to="/blog">← 返回博客首页</Link>
+      </main>
     );
   }
 
-  if (!post) {
-    return <Navigate to="/blog" replace />;
-  }
+  const readingMinutes = post.readingMinutes ?? estimateReadingMinutes(post.content);
 
   return (
-    <div className="min-h-screen pt-20">
+    <main>
+      <ArticleHero post={post} readingMinutes={readingMinutes} />
       <BlogDetail post={post} />
-      <div className="mx-auto max-w-4xl px-4 pb-20 sm:px-6 lg:px-8">
+      <div className="article-comments">
         {slug && <CommentSection blogSlug={slug} />}
       </div>
-    </div>
+    </main>
   );
 };
 

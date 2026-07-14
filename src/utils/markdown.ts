@@ -29,6 +29,11 @@ export async function parseMarkdown(slug: string): Promise<BlogPost | null> {
       cover: data.cover,
       tags: data.tags || [],
       excerpt: data.excerpt || '',
+      category: data.category,
+      updatedAt: data.updatedAt,
+      pinned: data.pinned === true,
+      readingMinutes: data.readingMinutes,
+      coverAlt: data.coverAlt || data.title,
       content: markdownContent,
     };
   } catch (error) {

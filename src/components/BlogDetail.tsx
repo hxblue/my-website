@@ -1,152 +1,90 @@
-// import ReactMarkdown, { type Components } from 'react-markdown';
-// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
-// import { Link } from 'react-router-dom';
-// import { useMemo } from 'react';
-// import type { BlogPost } from '../types/blog';
-// import { useTheme } from '../hooks/useTheme';
-
-// interface BlogDetailProps {
-//   post: BlogPost;
-// }
-
-// const BlogDetail = ({ post }: BlogDetailProps) => {
-//   const { theme } = useTheme();
-//   const markdownComponents = useMemo<Components>(
-//     () => ({
-//       code({ className, children, ...props }) {
-//         const match = /language-(\w+)/.exec(className || '');
-
-//         return match ? (
-//           <SyntaxHighlighter style={theme === 'dark' ? oneDark : oneLight} language={match[1]} PreTag="div">
-//             {String(children).replace(/\n$/, '')}
-//           </SyntaxHighlighter>
-//         ) : (
-//           <code className={className} {...props}>
-//             {children}
-//           </code>
-//         );
-//       },
-//     }),
-//     [theme],
-//   );
-
-//   return (
-//     <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-//       <Link to="/blog" className="editorial-link text-sm">
-//         ← 返回博客列表
-//       </Link>
-
-//       <header className="mt-14 border-b border-line pb-10">
-//         <p className="meta-label">{post.tags.join(' · ')}</p>
-//         <h1 className="mt-5 font-serif text-5xl font-semibold leading-[1.08] sm:text-7xl">{post.title}</h1>
-//         <time dateTime={post.date} className="mt-6 block font-mono text-sm text-muted">
-//           {new Date(post.date).toLocaleDateString('zh-CN', {
-//             year: 'numeric',
-//             month: 'long',
-//             day: 'numeric',
-//           })}
-//         </time>
-//       </header>
-
-//       <div className="prose prose-lg mt-12 max-w-none">
-//         <ReactMarkdown components={markdownComponents}>{post.content}</ReactMarkdown>
-//       </div>
-//     </article>
-//   );
-// };
-
-// export default BlogDetail;
-import ReactMarkdown, { type Components } from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  oneDark,
-  oneLight,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Link } from "react-router-dom";
-import { useMemo } from "react";
-import type { BlogPost } from "../types/blog";
-import { useTheme } from "../hooks/useTheme";
+import { useMemo } from 'react';
+import ReactMarkdown, { type Components } from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import type { BlogPost } from '../types/blog';
+import { extractMarkdownHeadings } from '../utils/blog';
+import { useActiveHeading } from '../hooks/useActiveHeading';
+import ArticleToc from './blog/ArticleToc';
+import MarkdownCodeBlock from './blog/MarkdownCodeBlock';
 
 interface BlogDetailProps {
   post: BlogPost;
 }
 
+const isExternalUrl = (href?: string) => Boolean(href && /^https?:\/\//.test(href));
+
 const BlogDetail = ({ post }: BlogDetailProps) => {
-  const { theme } = useTheme();
+  const headings = useMemo(() => extractMarkdownHeadings(post.content), [post.content]);
+  const headingIdByLine = useMemo(
+    () => new Map(headings.map((heading) => [heading.line, heading.id])),
+    [headings],
+  );
+  const activeHeadingId = useActiveHeading(headings);
 
   const markdownComponents = useMemo<Components>(
     () => ({
-      code({ className, children, ...props }) {
-        const match = /language-(\w+)/.exec(className || "");
-
-        return match ? (
-          <SyntaxHighlighter
-            style={theme === "dark" ? oneDark : oneLight}
-            language={match[1]}
-            PreTag="div"
-          >
-            {String(children).replace(/\n$/, "")}
-          </SyntaxHighlighter>
-        ) : (
-          <code className={className} {...props}>
-            {children}
-          </code>
-        );
+      h2({ node, children, ...props }) {
+        const id = node?.position?.start.line
+          ? headingIdByLine.get(node.position.start.line)
+          : undefined;
+        return <h2 id={id} {...props}>{children}</h2>;
       },
-
+      h3({ node, children, ...props }) {
+        const id = node?.position?.start.line
+          ? headingIdByLine.get(node.position.start.line)
+          : undefined;
+        return <h3 id={id} {...props}>{children}</h3>;
+      },
+      code({ className, children }) {
+        return <MarkdownCodeBlock className={className}>{children}</MarkdownCodeBlock>;
+      },
+      pre({ children }) {
+        return <>{children}</>;
+      },
       a({ href, children, ...props }) {
-        const isExternal = href?.startsWith("http");
-
+        const external = isExternalUrl(href);
         return (
           <a
             href={href}
-            target={isExternal ? "_blank" : undefined}
-            rel={isExternal ? "noopener noreferrer" : undefined}
-            className="text-blue-600 underline underline-offset-4 hover:text-blue-800"
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener noreferrer' : undefined}
             {...props}
           >
             {children}
           </a>
         );
       },
+      img({ alt, ...props }) {
+        return (
+          <img
+            alt={alt ?? ''}
+            loading="lazy"
+            decoding="async"
+            onError={(event) => {
+              event.currentTarget.classList.add('is-broken');
+              event.currentTarget.setAttribute('aria-hidden', 'true');
+            }}
+            {...props}
+          />
+        );
+      },
     }),
-    [theme],
+    [headingIdByLine],
   );
 
   return (
-    <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-      <Link to="/blog" className="editorial-link text-sm">
-        ← 返回博客列表
-      </Link>
-
-      <header className="mt-14 border-b border-line pb-10">
-        <p className="meta-label">{post.tags.join(" · ")}</p>
-        <h1 className="mt-5 font-serif text-5xl font-semibold leading-[1.08] sm:text-7xl">
-          {post.title}
-        </h1>
-        <time
-          dateTime={post.date}
-          className="mt-6 block font-mono text-sm text-muted"
-        >
-          {new Date(post.date).toLocaleDateString("zh-CN", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </time>
-      </header>
-
-      <div className="prose prose-lg mt-12 max-w-none">
-        <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
-          components={markdownComponents}
-        >
-          {post.content}
-        </ReactMarkdown>
-      </div>
-    </article>
+    <div className="article-layout">
+      <article className="article-content-card">
+        <div className="prose prose-lg max-w-none blog-prose">
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+            {post.content}
+          </ReactMarkdown>
+        </div>
+      </article>
+      <aside className="article-toc-column">
+        <ArticleToc items={headings} activeId={activeHeadingId} />
+      </aside>
+    </div>
   );
 };
 
