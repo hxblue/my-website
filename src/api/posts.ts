@@ -58,8 +58,6 @@ function isNotionConfigured(): boolean {
   return !!NOTION_TOKEN && !!DATABASE_ID;
 }
 
-const wait = (delay: number) => new Promise((resolve) => window.setTimeout(resolve, delay));
-
 /**
  * 提取标签（支持 Multi-select 和 Text 两种类型）
  */
@@ -138,39 +136,21 @@ async function notionFetch<T>(endpoint: string, options: RequestInit = {}): Prom
     headers['Notion-Version'] = '2022-06-28';
   }
 
-  let lastError: unknown;
+  const response = await fetch(url, {
+    ...options,
+    signal: options.signal ?? AbortSignal.timeout(15000),
+    headers: {
+      ...headers,
+      ...options.headers,
+    },
+  });
 
-  // 本地 Vite 代理偶尔会短暂返回 502；只读查询允许有限重试，避免误切到其他数据源。
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    let response: Response;
-
-    try {
-      response = await fetch(url, {
-        ...options,
-        signal: options.signal ?? AbortSignal.timeout(15000),
-        headers: {
-          ...headers,
-          ...options.headers,
-        },
-      });
-    } catch (error) {
-      lastError = error;
-      if (attempt === 2) throw error;
-      await wait(600 * (attempt + 1));
-      continue;
-    }
-
-    if (response.ok) return response.json() as Promise<T>;
-
+  if (!response.ok) {
     const errorText = await response.text();
-    const error = new Error(`Notion API error: ${response.status} - ${errorText}`);
-    const retryable = response.status === 429 || response.status >= 500;
-    if (!retryable || attempt === 2) throw error;
-    lastError = error;
-    await wait(600 * (attempt + 1));
+    throw new Error(`Notion API error: ${response.status} - ${errorText}`);
   }
 
-  throw lastError instanceof Error ? lastError : new Error('Notion API request failed');
+  return response.json() as Promise<T>;
 }
 
 /**
