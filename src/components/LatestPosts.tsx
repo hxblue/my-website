@@ -11,7 +11,7 @@ const formatDate = (date: string) =>
   });
 
 const LatestPosts = () => {
-  const { posts } = usePublishedPosts();
+  const { posts, status, retry } = usePublishedPosts();
 
   const latestPosts = useMemo(
     () => sortPostsByDate(posts).slice(0, 3),
@@ -24,6 +24,12 @@ const LatestPosts = () => {
         <p className="section-kicker">03 / LATEST WRITING</p>
         <h2 className="section-title mt-4">最近博客</h2>
         <p className="mt-4 text-muted">主要记录学习过程和工程上的小思考。</p>
+        {status === 'loading' && <p className="mt-6 text-muted">正在同步 Notion 文章…</p>}
+        {status === 'error' && (
+          <button type="button" className="editorial-link mt-6" onClick={retry}>
+            → Notion 同步失败，点击重试
+          </button>
+        )}
         <div className="mt-10 grid gap-x-12 gap-y-10 md:grid-cols-2">
           {latestPosts.map((post) => (
             <article key={post.slug} className="border-t border-line pt-6">

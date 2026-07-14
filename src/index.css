@@ -643,6 +643,30 @@ p {
   margin-bottom: 1rem;
 }
 
+.blog-sync-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid color-mix(in srgb, #ef4444 45%, var(--blog-border));
+  border-radius: 1rem;
+  background: color-mix(in srgb, #ef4444 7%, var(--blog-surface));
+  padding: 1.25rem 1.4rem;
+}
+
+.blog-sync-error h2 {
+  margin: 0.35rem 0 0.2rem;
+  color: var(--blog-text);
+  font-size: 1.15rem;
+}
+
+.blog-sync-error p:last-child {
+  margin: 0;
+  color: var(--blog-muted);
+  font-size: 0.88rem;
+}
+
 .blog-index__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -916,7 +940,9 @@ p {
 
 .blog-pagination button,
 .blog-empty-state button,
-.blog-status-page a {
+.blog-status-page a,
+.blog-status-page button,
+.blog-sync-error button {
   border: 1px solid var(--blog-border);
   border-radius: 0.65rem;
   background: var(--blog-surface);
@@ -924,6 +950,7 @@ p {
   color: var(--blog-text);
   font-size: 0.76rem;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .blog-pagination button.is-active {
@@ -1226,6 +1253,11 @@ p {
 }
 
 @media (max-width: 767px) {
+  .blog-sync-error {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .blog-header__inner {
     height: 4rem;
   }

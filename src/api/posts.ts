@@ -58,6 +58,8 @@ function isNotionConfigured(): boolean {
   return !!NOTION_TOKEN && !!DATABASE_ID;
 }
 
+const wait = (delay: number) => new Promise((resolve) => window.setTimeout(resolve, delay));
+
 /**
  * 提取标签（支持 Multi-select 和 Text 两种类型）
  */
@@ -136,23 +138,39 @@ async function notionFetch<T>(endpoint: string, options: RequestInit = {}): Prom
     headers['Notion-Version'] = '2022-06-28';
   }
 
-  const response = await fetch(url, {
-    ...options,
-    signal: options.signal ?? AbortSignal.timeout(8000),
-    headers: {
-      ...headers,
-      ...options.headers,
-    },
-  });
+  let lastError: unknown;
 
-  if (!response.ok) {
+  // 本地 Vite 代理偶尔会短暂返回 502；只读查询允许有限重试，避免误切到其他数据源。
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let response: Response;
+
+    try {
+      response = await fetch(url, {
+        ...options,
+        signal: options.signal ?? AbortSignal.timeout(15000),
+        headers: {
+          ...headers,
+          ...options.headers,
+        },
+      });
+    } catch (error) {
+      lastError = error;
+      if (attempt === 2) throw error;
+      await wait(600 * (attempt + 1));
+      continue;
+    }
+
+    if (response.ok) return response.json() as Promise<T>;
+
     const errorText = await response.text();
-    console.error('Notion API error:', response.status, errorText);
-    console.error('Request URL:', url);
-    throw new Error(`Notion API error: ${response.status} - ${errorText}`);
+    const error = new Error(`Notion API error: ${response.status} - ${errorText}`);
+    const retryable = response.status === 429 || response.status >= 500;
+    if (!retryable || attempt === 2) throw error;
+    lastError = error;
+    await wait(600 * (attempt + 1));
   }
 
-  return response.json() as Promise<T>;
+  throw lastError instanceof Error ? lastError : new Error('Notion API request failed');
 }
 
 /**
@@ -160,64 +178,51 @@ async function notionFetch<T>(endpoint: string, options: RequestInit = {}): Prom
  */
 export async function getPublishedPosts(): Promise<BlogMeta[]> {
   if (!isNotionConfigured()) {
-    console.warn('Notion is not configured');
-    return [];
+    throw new Error('Notion is not configured');
   }
 
-  try {
-    const response = await notionFetch<NotionListResponse>(`/databases/${DATABASE_ID}/query`, {
-      method: 'POST',
-      body: JSON.stringify({
-        filter: {
-          property: 'Published',
-          checkbox: {
-            equals: true,
-          },
+  const response = await notionFetch<NotionListResponse>(`/databases/${DATABASE_ID}/query`, {
+    method: 'POST',
+    body: JSON.stringify({
+      filter: {
+        property: 'Published',
+        checkbox: {
+          equals: true,
         },
-        sorts: [
-          {
-            property: 'Date',
-            direction: 'descending',
-          },
-        ],
-      }),
-    });
+      },
+      sorts: [
+        {
+          property: 'Date',
+          direction: 'descending',
+        },
+      ],
+    }),
+  });
 
-    if (!response.results || response.results.length === 0) {
-      return [];
-    }
+  if (!response.results || response.results.length === 0) return [];
 
-    return response.results.map((page) => {
-      const properties = page.properties;
-      const title = properties.Name?.title?.[0]?.plain_text || 'Untitled';
+  return response.results.map((page) => {
+    const properties = page.properties;
+    const title = properties.Name?.title?.[0]?.plain_text || 'Untitled';
 
-      return {
-        slug: properties.Slug?.rich_text?.[0]?.plain_text || '',
-        title,
-        date: properties.Date?.date?.start || new Date().toISOString().split('T')[0],
-        cover: properties.Cover?.url || '',
-        tags: extractTags(properties.Tags),
-        excerpt: properties.Excerpt?.rich_text?.[0]?.plain_text || '',
-        ...mapOptionalMetadata(properties, title),
-      };
-    });
-  } catch (error) {
-    console.error('Error fetching posts from Notion:', error);
-    return [];
-  }
+    return {
+      slug: properties.Slug?.rich_text?.[0]?.plain_text || '',
+      title,
+      date: properties.Date?.date?.start || new Date().toISOString().split('T')[0],
+      cover: properties.Cover?.url || '',
+      tags: extractTags(properties.Tags),
+      excerpt: properties.Excerpt?.rich_text?.[0]?.plain_text || '',
+      ...mapOptionalMetadata(properties, title),
+    };
+  });
 }
 
 /**
  * 获取页面的 blocks 内容
  */
 async function getPageBlocks(pageId: string): Promise<string> {
-  try {
-    const response = await notionFetch<NotionBlocksResponse>(`/blocks/${pageId}/children`);
-    return blocksToMarkdown(response.results || []);
-  } catch (error) {
-    console.error('Error fetching page blocks:', error);
-    return '';
-  }
+  const response = await notionFetch<NotionBlocksResponse>(`/blocks/${pageId}/children`);
+  return blocksToMarkdown(response.results || []);
 }
 
 /**
@@ -284,60 +289,51 @@ function extractText(richText?: NotionText[]): string {
  */
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   if (!isNotionConfigured()) {
-    console.warn('Notion is not configured');
-    return null;
+    throw new Error('Notion is not configured');
   }
 
-  try {
-
-    const response = await notionFetch<NotionListResponse>(`/databases/${DATABASE_ID}/query`, {
-      method: 'POST',
-      body: JSON.stringify({
-        filter: {
-          and: [
-            {
-              property: 'Slug',
-              rich_text: {
-                equals: slug,
-              },
+  const response = await notionFetch<NotionListResponse>(`/databases/${DATABASE_ID}/query`, {
+    method: 'POST',
+    body: JSON.stringify({
+      filter: {
+        and: [
+          {
+            property: 'Slug',
+            rich_text: {
+              equals: slug,
             },
-            {
-              property: 'Published',
-              checkbox: {
-                equals: true,
-              },
+          },
+          {
+            property: 'Published',
+            checkbox: {
+              equals: true,
             },
-          ],
-        },
-      }),
-    });
+          },
+        ],
+      },
+    }),
+  });
 
-    if (!response.results || response.results.length === 0) {
-      return null;
-    }
+  if (!response.results || response.results.length === 0) return null;
 
-    const page = response.results[0];
-    const properties = page.properties;
-    const pageId = page.id;
-    const title = properties.Name?.title?.[0]?.plain_text || 'Untitled';
+  const page = response.results[0];
+  const properties = page.properties;
+  const pageId = page.id;
+  const title = properties.Name?.title?.[0]?.plain_text || 'Untitled';
 
-    // 从页面 blocks 获取内容
-    const content = await getPageBlocks(pageId);
+  // 从页面 blocks 获取内容
+  const content = await getPageBlocks(pageId);
 
-    return {
-      slug,
-      title,
-      date: properties.Date?.date?.start || new Date().toISOString().split('T')[0],
-      cover: properties.Cover?.url || '',
-      tags: extractTags(properties.Tags),
-      excerpt: properties.Excerpt?.rich_text?.[0]?.plain_text || '',
-      content,
-      ...mapOptionalMetadata(properties, title),
-    };
-  } catch (error) {
-    console.error('Error fetching post from Notion:', error);
-    return null;
-  }
+  return {
+    slug,
+    title,
+    date: properties.Date?.date?.start || new Date().toISOString().split('T')[0],
+    cover: properties.Cover?.url || '',
+    tags: extractTags(properties.Tags),
+    excerpt: properties.Excerpt?.rich_text?.[0]?.plain_text || '',
+    content,
+    ...mapOptionalMetadata(properties, title),
+  };
 }
 
 /**

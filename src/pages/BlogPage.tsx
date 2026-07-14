@@ -25,7 +25,7 @@ const emptyFilters: BlogFilterState = {
 };
 
 const BlogPage = () => {
-  const { posts, status } = usePublishedPosts();
+  const { posts, status, error, retry } = usePublishedPosts();
   const [filters, setFilters] = useState<BlogFilterState>(emptyFilters);
   const [page, setPage] = useState(1);
   const location = useLocation();
@@ -90,6 +90,17 @@ const BlogPage = () => {
           <p className="blog-sync-status" role="status">正在同步最新文章…</p>
         )}
 
+        {status === 'error' && (
+          <div className="blog-sync-error" role="alert">
+            <div>
+              <p className="blog-eyebrow">NOTION SYNC ERROR</p>
+              <h2>Notion 文章同步失败</h2>
+              <p>{error}</p>
+            </div>
+            <button type="button" onClick={retry}>重新同步</button>
+          </div>
+        )}
+
         <div className="blog-index__layout">
           <section className="blog-post-list" aria-label="文章列表">
             {visiblePosts.map((post, index) => (
@@ -101,7 +112,7 @@ const BlogPage = () => {
               />
             ))}
 
-            {filteredPosts.length === 0 && (
+            {status === 'ready' && filteredPosts.length === 0 && (
               <div className="blog-empty-state">
                 <p className="blog-eyebrow">NO MATCHES</p>
                 <h2>没有找到匹配的文章</h2>

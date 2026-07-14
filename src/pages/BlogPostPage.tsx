@@ -8,7 +8,7 @@ import { estimateReadingMinutes } from '../utils/blog';
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { post, status } = useBlogPost(slug);
+  const { post, status, error, retry } = useBlogPost(slug);
 
   usePageMeta({
     title: post ? `${post.title} | Chblue` : status === 'not-found' ? '文章未找到 | Chblue' : '正在加载文章 | Chblue',
@@ -27,6 +27,18 @@ const BlogPostPage = () => {
   }
 
   if (status === 'not-found' || !post) {
+    if (status === 'error') {
+      return (
+        <main className="blog-status-page" role="alert">
+          <p className="blog-eyebrow">NOTION SYNC ERROR</p>
+          <h1>暂时无法加载文章</h1>
+          <p>{error}</p>
+          <button type="button" onClick={retry}>重新同步</button>
+          <Link to="/blog">← 返回博客首页</Link>
+        </main>
+      );
+    }
+
     return (
       <main className="blog-status-page">
         <p className="blog-eyebrow">404 · NOT FOUND</p>

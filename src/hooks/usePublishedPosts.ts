@@ -1,20 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getPublishedPosts } from '../api/posts';
-import { blogs as fallbackBlogs } from '../data/blogs';
 import type { BlogMeta } from '../types/blog';
 
 interface PublishedPostsState {
   posts: BlogMeta[];
-  status: 'loading' | 'ready';
-  usingFallback: boolean;
+  status: 'loading' | 'ready' | 'error';
+  error: string | null;
+  retry: () => void;
 }
 
 export function usePublishedPosts(): PublishedPostsState {
-  const [state, setState] = useState<PublishedPostsState>({
-    posts: fallbackBlogs,
+  const [requestKey, setRequestKey] = useState(0);
+  const [state, setState] = useState<Omit<PublishedPostsState, 'retry'>>({
+    posts: [],
     status: 'loading',
-    usingFallback: true,
+    error: null,
   });
+  const retry = useCallback(() => {
+    setState({ posts: [], status: 'loading', error: null });
+    setRequestKey((key) => key + 1);
+  }, []);
 
   useEffect(() => {
     let isActive = true;
@@ -22,22 +27,22 @@ export function usePublishedPosts(): PublishedPostsState {
     getPublishedPosts()
       .then((notionPosts) => {
         if (!isActive) return;
-        setState({
-          posts: notionPosts.length > 0 ? notionPosts : fallbackBlogs,
-          status: 'ready',
-          usingFallback: notionPosts.length === 0,
-        });
+        setState({ posts: notionPosts, status: 'ready', error: null });
       })
-      .catch(() => {
-        if (isActive) {
-          setState({ posts: fallbackBlogs, status: 'ready', usingFallback: true });
-        }
+      .catch((error: unknown) => {
+        if (!isActive) return;
+        console.error('Failed to sync Notion posts:', error);
+        setState({
+          posts: [],
+          status: 'error',
+          error: '无法连接 Notion，请检查网络后重试。',
+        });
       });
 
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [requestKey]);
 
-  return state;
+  return { ...state, retry };
 }
