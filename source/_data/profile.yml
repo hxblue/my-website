@@ -1,0 +1,64 @@
+# 作品集首页的个人信息与文案（原 React 站点 Hero / Availability / About / LatestPosts / Contact 组件中的文字）
+
+hero:
+  meta: 'Shanghai · 2026 · seeking backend / full-stack internship'
+  title: '你好，我是 Chblue。'
+  intro: '正在找后端 / 全栈实习的全栈开发者，专注用 Web 和 AI 做能真正上线的产品。最近在关注 LLM 能力怎么变成稳定可用的产品功能。'
+  links:
+    - text: '→ 查看项目'
+      href: '#projects'
+    - text: '→ 写邮件'
+      href: 'mailto:wanglemao03@gmail.com'
+    - text: '→ GitHub'
+      href: 'https://github.com/hxblue'
+
+availability:
+  note: '// 投递简历 / 约面试之前，可以先看这个'
+  fields:
+    - key: 'name'
+      value: 'Chblue'
+    - key: 'role'
+      value: 'Full-stack developer (intern)'
+    - key: 'available'
+      value: '2026 年 7 月起，全职实习'
+    - key: 'location'
+      value: '广州 / 上海 / 杭州'
+    - key: '关注方向'
+      value: ['AI 应用', '后端开发', '产品体验']
+    - key: '求职方向'
+      value: ['后端实习', '全栈实习', 'AI 应用相关岗位']
+
+about:
+  kicker: '01 / CAPABILITIES'
+  title: '技术方向与能力'
+  intro: '我目前主攻 Java 后端开发，也在学习如何把大模型能力接入实际项目。前端部分主要借助 AI 编程工具完成页面实现，对 React、Vue 等框架有初步了解，目标是能够独立完成从后端逻辑到上线交付的完整项目。'
+  meta:
+    - ['主攻方向', 'Java 后端开发']
+    - ['持续关注', 'AI 应用落地']
+    - ['前端定位', '支持项目完整呈现']
+    - ['工程实践', '部署、迭代与复盘']
+
+projects_section:
+  kicker: '02 / SELECTED WORK'
+  title: '代表项目'
+  intro: '个真正上线、能够访问和验证的项目。重点不是功能数量，而是如何把一个想法完整交付。'
+
+latest_section:
+  kicker: '03 / LATEST WRITING'
+  title: '最近博客'
+  intro: '主要记录学习过程和工程上的小思考。'
+
+contact:
+  kicker: '04 / CONTACT'
+  title: '如果你对我的项目感兴趣，欢迎联系我。'
+  intro: '我正在寻找后端 / 全栈实习机会，也愿意交流 Web、AI 应用和项目实践。'
+  links:
+    - label: 'GitHub'
+      value: 'github.com/hxblue'
+      href: 'https://github.com/hxblue'
+    - label: 'Email'
+      value: 'wanglemao03@gmail.com'
+      href: 'mailto:wanglemao03@gmail.com'
+    - label: 'Backup'
+      value: 'wanglemao03@163.com'
+      href: 'mailto:wanglemao03@163.com'

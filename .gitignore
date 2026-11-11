@@ -28,3 +28,9 @@ dist-ssr
 
 .vercel
 .env*.local
+
+# Hexo
+public/
+db.json
+.deploy*/
+.preview/

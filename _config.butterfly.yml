@@ -1,0 +1,357 @@
+# Butterfly 主题配置（覆盖 node_modules/hexo-theme-butterfly/_config.yml 中的同名项）
+# 文档：https://butterfly.js.org/
+
+nav:
+  logo:
+  display_title: true
+  display_post_title: true
+  fixed: false
+
+menu:
+  首页: / || fas fa-home
+  能力: /#about || fas fa-layer-group
+  项目: /projects/ || fas fa-code
+  博客: /blog/ || fas fa-book-open
+  知识库||fas fa-folder-tree:
+    分类: /categories/ || fas fa-folder-open
+    标签: /tags/ || fas fa-tags
+    归档: /archives/ || fas fa-box-archive
+  联系: /#contact || fas fa-envelope
+
+code_blocks:
+  theme: darker
+  macStyle: true
+  height_limit: 480
+  word_wrap: false
+  copy: true
+  language: true
+  shrink: false
+  fullpage: true
+
+social:
+  fab fa-github: https://github.com/hxblue || GitHub || '#24292e'
+  fas fa-envelope: mailto:wanglemao03@gmail.com || Email || '#4a7dbe'
+
+favicon: /favicon.svg
+
+avatar:
+  img: /images/avatar.svg
+  effect: false
+
+disable_top_img: false
+default_top_img: /images/blog-hero.webp
+index_img: /images/blog-hero.webp
+archive_img: /images/blog-hero.webp
+tag_img: /images/blog-hero.webp
+category_img: /images/blog-hero.webp
+footer_img: false
+background:
+
+cover:
+  index_enable: true
+  aside_enable: true
+  archives_enable: true
+  default_cover:
+    - /images/blog-hero.webp
+
+error_img:
+  flink: /images/blog-hero.webp
+  post_page: /images/blog-hero.webp
+
+error_404:
+  enable: true
+  subtitle: '页面不存在'
+  background: /images/blog-hero.webp
+
+post_meta:
+  page:
+    date_type: created
+    date_format: date
+    categories: true
+    tags: true
+    label: true
+  post:
+    position: left
+    date_type: both
+    date_format: date
+    categories: true
+    tags: true
+    label: true
+
+subtitle:
+  enable: true
+  effect: true
+  typed_option:
+  source: false
+  sub:
+    - 记录学习过程、工程实践和 AI 产品实验
+    - 文章不多，但每一篇都来自真正遇到的问题
+
+index_layout: 3
+
+index_post_content:
+  method: 2
+  length: 160
+
+toc:
+  post: true
+  page: false
+  number: true
+  expand: false
+  style_simple: false
+  scroll_percent: true
+
+post_copyright:
+  enable: true
+  decode: false
+  author_href: /
+  license: CC BY-NC-SA 4.0
+  license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+related_post:
+  enable: true
+  limit: 6
+  date_type: created
+
+post_pagination: 1
+
+noticeOutdate:
+  enable: false
+
+footer:
+  nav:
+  owner:
+    enable: true
+    since: 2025
+  copyright:
+    enable: true
+    version: false
+  custom_text: 'Built with Hexo + Butterfly · Deployed on Vercel'
+
+aside:
+  enable: true
+  hide: false
+  button: true
+  mobile: true
+  position: right
+  display:
+    archive: true
+    tag: true
+    category: true
+  card_author:
+    enable: true
+    description: '全栈开发者（实习），主攻 Java 后端，关注 AI 应用落地。'
+    button:
+      enable: true
+      icon: fab fa-github
+      text: GitHub
+      link: https://github.com/hxblue
+  card_announcement:
+    enable: true
+    content: '正在寻找 2026 年 7 月起的后端 / 全栈实习。项目和联系方式见 <a href="/">首页</a>。'
+  card_recent_post:
+    enable: true
+    limit: 5
+    sort: date
+    sort_order:
+  card_newest_comments:
+    enable: false
+  card_categories:
+    enable: true
+    limit: 8
+    expand: none
+    sort_order:
+  card_tags:
+    enable: true
+    limit: 40
+    color: false
+    custom_colors:
+    orderby: random
+    order: 1
+    sort_order:
+  card_archives:
+    enable: true
+    type: monthly
+    format: YYYY 年 MM 月
+    order: -1
+    limit: 8
+    sort_order:
+  card_post_series:
+    enable: true
+    series_title: false
+    orderBy: 'date'
+    order: -1
+  card_webinfo:
+    enable: true
+    post_count: true
+    last_push_date: true
+    sort_order:
+    runtime_date:
+
+translate:
+  enable: false
+
+readmode: true
+
+darkmode:
+  enable: true
+  button: true
+  autoChangeMode: 1
+  start:
+  end:
+
+rightside_scroll_percent: true
+
+anchor:
+  auto_update: false
+  click_to_scroll: true
+
+copy:
+  enable: true
+  copyright:
+    enable: false
+
+wordcount:
+  enable: false
+
+# 不蒜子计数会请求第三方统计服务，默认关闭
+busuanzi:
+  site_uv: false
+  site_pv: false
+  page_pv: false
+
+math:
+  use:
+  per_page: false
+
+search:
+  use: local_search
+  placeholder: 搜索文章标题和正文
+  local_search:
+    preload: false
+    top_n_per_article: 1
+    unescape: false
+    pagination:
+      enable: false
+      hitsPerPage: 8
+    CDN:
+
+share:
+  use:
+
+comments:
+  use:
+
+theme_color:
+  enable: true
+  main: '#ff6b35'
+  paginator: '#ff6b35'
+  button_hover: '#1a1a1a'
+  text_selection: '#ff6b35'
+  link_color: '#444440'
+  meta_color: '#6b6b6b'
+  hr_color: '#e5e5e0'
+  code_foreground: '#c2410c'
+  code_background: 'rgba(26, 26, 26, .06)'
+  toc_color: '#ff6b35'
+  blockquote_padding_color: '#ff6b35'
+  blockquote_background_color: '#ff6b35'
+  scrollbar_color: '#ff6b35'
+  meta_theme_color_light: '#fafaf7'
+  meta_theme_color_dark: '#0e0e0d'
+
+category_ui:
+tag_ui:
+
+rounded_corners_ui: true
+text_align_justify: false
+
+mask:
+  header: true
+  footer: true
+
+preloader:
+  enable: false
+
+enter_transitions: true
+
+display_mode: light
+
+beautify:
+  enable: true
+  field: post
+  title_prefix_icon: '\f0c1'
+  title_prefix_icon_color: '#ff6b35'
+
+font:
+  global_font_size: 16px
+  code_font_size:
+  font_family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif
+  code_font_family: '"JetBrains Mono", Consolas, monospace'
+
+blog_title_font:
+  font_link: https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap
+  font_family: Fraunces, Georgia, "Noto Serif SC", serif
+
+hr_icon:
+  enable: true
+  icon:
+  icon_top:
+
+lightbox: medium_zoom
+
+series:
+  enable: false
+
+mermaid:
+  enable: true
+  code_write: true
+  theme:
+    light: default
+    dark: dark
+  open_in_new_tab: true
+  zoom_pan: true
+
+note:
+  style: flat
+  icons: true
+  border_radius: 3
+  light_bg_offset: 0
+
+pjax:
+  enable: false
+
+snackbar:
+  enable: true
+  position: bottom-left
+  bg_light: '#1a1a1a'
+  bg_dark: '#ff7a45'
+
+instantpage: true
+
+lazyload:
+  enable: true
+  native: true
+  field: site
+  placeholder:
+  blur: false
+
+Open_Graph_meta:
+  enable: true
+  option:
+
+structured_data:
+  enable: true
+  alternate_name:
+
+css_prefix: true
+
+inject:
+  head:
+    - <link rel="stylesheet" href="/css/chblue.css">
+  bottom:
+
+CDN:
+  internal_provider: local
+  third_party_provider: jsdelivr
+  version: true
