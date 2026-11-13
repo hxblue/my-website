@@ -40,7 +40,8 @@ avatar:
 
 disable_top_img: false
 default_top_img: /images/blog-hero.webp
-index_img: /images/blog-hero.webp
+# 博客首页使用二次元海滨夜景，中央留白用于显示站点标题。
+index_img: /images/blog-hero-anime.webp
 archive_img: /images/blog-hero.webp
 tag_img: /images/blog-hero.webp
 category_img: /images/blog-hero.webp
