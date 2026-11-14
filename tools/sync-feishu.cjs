@@ -67,7 +67,8 @@ function validateSlug(slug) {
 }
 
 function readPost(file) {
-  const text = fs.readFileSync(file, 'utf8');
+  // Windows 检出可能使用 CRLF；比较前统一换行，避免无改动时误判成需要发布。
+  const text = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
   const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
   return { text, metadata: match ? yaml.load(match[1], { schema: yaml.JSON_SCHEMA }) || {} : {} };
 }

@@ -1,7 +1,22 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseOptions, validateUrl, validateSlug, transformMarkdown } = require('./sync-feishu.cjs');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { randomUUID } = require('node:crypto');
+const { parseOptions, validateUrl, validateSlug, transformMarkdown, readPost } = require('./sync-feishu.cjs');
+
+test('Windows 换行不会触发重复发布，原始日期和分类保留', () => {
+  const file = path.join(os.tmpdir(), `feishu-sync-${randomUUID()}.md`);
+  try {
+    fs.writeFileSync(file, '---\r\ndate: 2026-11-14\r\ncategories: [学习]\r\n---\r\n正文\r\n');
+    const post = readPost(file);
+    assert.equal(post.metadata.date, '2026-11-14');
+    assert.deepEqual(post.metadata.categories, ['学习']);
+    assert.equal(post.text.includes('\r'), false);
+  } finally { if (fs.existsSync(file)) fs.unlinkSync(file); }
+});
 
 test('文档 URL 去掉分享跟踪参数，拒绝伪造域名和其他路径', () => {
   assert.equal(validateUrl('https://example.feishu.cn/wiki/Abc123?from=copy'), 'https://example.feishu.cn/wiki/Abc123');
