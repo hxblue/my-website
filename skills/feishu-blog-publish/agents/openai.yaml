@@ -1,0 +1,4 @@
+interface:
+  display_name: "飞书博客发布"
+  short_description: "将飞书文档同步为个人博客文章，保留网址、下载图片并手动发布上线"
+  default_prompt: "使用 $feishu-blog-publish 将我指定的飞书文档同步到 Chblue 博客，并按我的要求预览或发布。"

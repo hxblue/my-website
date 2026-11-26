@@ -1,32 +1,33 @@
 # 作品集首页的个人信息与文案（原 React 站点 Hero / Availability / About / LatestPosts / Contact 组件中的文字）
 
 hero:
-  meta: 'Shanghai · 2026 · seeking backend / full-stack internship'
+  meta: 'Java Backend · AI Applications'
   title: '你好，我是 Chblue。'
-  intro: '正在找后端 / 全栈实习的全栈开发者，专注用 Web 和 AI 做能真正上线的产品。最近在关注 LLM 能力怎么变成稳定可用的产品功能。'
+  intro: '我主攻 Java 后端开发，关注如何把大模型接入可运行的应用。这里有我的 Spring AI 智能体、协作云图库和技术笔记。'
   links:
     - text: '→ 查看项目'
       href: '#projects'
-    - text: '→ 写邮件'
-      href: 'mailto:wanglemao03@gmail.com'
+    - text: '→ 求职与简历'
+      href: '#opportunities'
     - text: '→ GitHub'
       href: 'https://github.com/hxblue'
 
 availability:
-  note: '// 投递简历 / 约面试之前，可以先看这个'
+  note: '求职信息'
+  resume_label: '→ 邮件索取简历'
   fields:
     - key: 'name'
       value: 'Chblue'
     - key: 'role'
-      value: 'Full-stack developer (intern)'
+      value: 'Java 后端开发实习'
     - key: 'available'
-      value: '2026 年 7 月起，全职实习'
+      value: '到岗时间沟通确认'
     - key: 'location'
       value: '广州 / 上海 / 杭州'
     - key: '关注方向'
       value: ['AI 应用', '后端开发', '产品体验']
     - key: '求职方向'
-      value: ['后端实习', '全栈实习', 'AI 应用相关岗位']
+      value: ['Java 后端', 'AI 应用开发', '全栈开发']
 
 about:
   kicker: '01 / CAPABILITIES'
@@ -41,7 +42,7 @@ about:
 projects_section:
   kicker: '02 / SELECTED WORK'
   title: '代表项目'
-  intro: '个真正上线、能够访问和验证的项目。重点不是功能数量，而是如何把一个想法完整交付。'
+  intro: '个项目，涵盖 Java 后端、AI 应用和个人站点。'
 
 latest_section:
   kicker: '03 / LATEST WRITING'
@@ -51,7 +52,7 @@ latest_section:
 contact:
   kicker: '04 / CONTACT'
   title: '如果你对我的项目感兴趣，欢迎联系我。'
-  intro: '我正在寻找后端 / 全栈实习机会，也愿意交流 Web、AI 应用和项目实践。'
+  intro: '欢迎交流 Java 后端、AI 应用和项目实践。'
   links:
     - label: 'GitHub'
       value: 'github.com/hxblue'

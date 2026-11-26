@@ -16,7 +16,7 @@ https://platform.claude.com/docs/zh-CN/agents-and-tools/tool-use/overview
 Cladue Code 的方式是自己定义tools Schema , 然后CC 想要调用它的话就会返回一个 tool_use , 执行完后 产生这个tool_result 。还有就是使用tool_choice来觉得CC何时使用工具 ， auto 就是代表允许CC自行觉得是不是调用任何可用的工具。此外还有any  , tool , none 。
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=YWYxMzNhY2QzYmQ1NzEwNjY1NzBhN2U3NDAzZWMxNmRfRm45Z3BEblVKWGc5RU1TTUNCQXA2Vmplekd2NDQ1eVRfVG9rZW46VWFvbGJaNnJIb1RYeEx4SVh5eGNzTWxHbnVmXzE3ODU3MzUyMTA6MTc4NTczODgxMF9WNA&add_watermark=true&scene_type=CCM)
+![Claude tool choice 的 auto、any 与指定工具三种模式](/images/posts/functioncalling/01.png)
 
 
 CC的工具结构定义就和OPENAI的不同

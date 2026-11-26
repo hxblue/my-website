@@ -149,7 +149,7 @@ aside:
       link: https://github.com/hxblue
   card_announcement:
     enable: true
-    content: '正在寻找 2026 年 7 月起的后端 / 全栈实习。项目和联系方式见 <a href="/">首页</a>。'
+    content: '求职方向、到岗安排和简历联系方式见 <a href="/#opportunities">首页求职信息</a>。'
   card_recent_post:
     enable: true
     limit: 5

@@ -8,6 +8,8 @@
 
 在仓库目录运行 `npm ci`。支持 `/docx/` 文档链接和 `/wiki/` 知识库文档链接。
 
+中枢使用单独的 `E:\CodeProject\claudeproject\developer_protfolio-hexo-publisher` 克隆发布，开发目录用于修改站点和预览。运行发布命令前，在专用目录确认分支为 `hexo-site`、`git status --porcelain` 为空，再执行 `git pull --ff-only origin hexo-site`。若拉取更新了依赖锁文件，重新执行 `npm ci`。执行位置和任务参数见 [飞书博客发布 Skill](../skills/feishu-blog-publish/SKILL.md)。
+
 ## 常用操作
 
 只导入本地、先看效果：

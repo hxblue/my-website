@@ -117,7 +117,7 @@ public int subarraySum(int[] nums, int k) {
 ```
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=NzNjYjBlMTM2ZjM0YTIyZTIyMGZkZWQ0NjIwOWE1ZmJfUmdidnJpS293WEFSc3J4Z0E4enBqWGx3QnZRNlVNZUNfVG9rZW46UW8zZ2I5RWMyb0U4WEN4QVh5aGNBdXVHbnFnXzE3ODU3Mzk0NzI6MTc4NTc0MzA3Ml9WNA&add_watermark=true&scene_type=CCM)
+![前缀和之差等于目标值的手绘示意图](/images/posts/windows/01.png)
 
 
 这个方法太权威了， 有点细节
@@ -353,7 +353,7 @@ int len = nums.length;
 ## 76.最小覆盖字串 还需要多加练习
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=YzYyNTkzZThjNGQ0M2Q4NjgxNWJlOGIyOTQxNzI5MjZfeHRKS25aNEpNR281eUhnckJkMW9ZWEg3UzlvbDc3bXZfVG9rZW46S3FrcWJ4ekp3b3N6MU54MlJCTWNtU0NDbkplXzE3ODU3Mzk0NzI6MTc4NTc0MzA3Ml9WNA&add_watermark=true&scene_type=CCM)
+![最小覆盖字串的题目及示例](/images/posts/windows/02.png)
 
 
 ```text

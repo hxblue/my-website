@@ -52,7 +52,7 @@ function renderProjectsSection(data, urlFor) {
   </section>`;
 }
 
-function renderAvailability(av) {
+function renderAvailability(av, email) {
   const val = (v) =>
     Array.isArray(v)
       ? `[${v.map((x) => `<span class="cb-json-str">"${esc(x)}"</span>`).join(', ')}]`
@@ -61,9 +61,10 @@ function renderAvailability(av) {
     .map((f, i) => `  <span class="cb-json-key">"${esc(f.key)}"</span>: ${val(f.value)}${i < av.fields.length - 1 ? ',' : ''}`)
     .join('\n');
   return `
-  <section class="cb-section cb-section--tight" aria-label="availability">
-    <p class="cb-note">${esc(av.note)}</p>
+  <section id="opportunities" class="cb-section cb-section--tight" aria-labelledby="opportunities-title">
+    <h2 id="opportunities-title" class="cb-note">${esc(av.note)}</h2>
     <pre class="cb-availability"><code>{\n${lines}\n}</code></pre>
+    <div class="cb-links"><a class="cb-link" href="${esc(email)}?subject=${encodeURIComponent('索取简历 - Chblue')}">${esc(av.resume_label)}</a></div>
   </section>`;
 }
 
@@ -110,7 +111,7 @@ function renderHome(ctx) {
     </div>
   </section>
 
-  ${renderAvailability(p.availability)}
+  ${renderAvailability(p.availability, p.contact.links.find((link) => link.label === 'Email').href)}
 
   <section id="about" class="cb-section">
     <div class="cb-about">

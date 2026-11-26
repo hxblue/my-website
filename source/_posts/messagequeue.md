@@ -33,7 +33,7 @@ cover: /images/covers/cover-12224794.webp
 安装完成
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=MmU5YTI1ODFmNDIxMWRkMDY0MGE4NTYwYmMxYjNhNmRfMlZQRENUS2VVNDl0UE55aFJqb01GcTU5Y3FGNWljUm9fVG9rZW46R09FTGJLQTNNb1pTczB4djhOVGNqVzhkbm1iXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![Docker Desktop 容器列表](/images/posts/messagequeue/01.png)
 
 
 # 安装MQ
@@ -47,10 +47,10 @@ docker pull rabbitmq:4-management
 ```
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=ODU0MGUwOWVhZWFhZmNlOGNkMTU3YmU5MjMyODJjODhfTThOaVlwRU9laU92bnVnMm5vcTMzRmdVbmlycnJVb1dfVG9rZW46SkZPbWI3NmNDbzNXcWt4Um9HbmNjQXRPbnFoXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![拉取 RabbitMQ 管理版镜像](/images/posts/messagequeue/02.png)
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=MDcxMjMxMWQwMzA0ZTg2MDBkMmI2Mjg4MjY5NjIyMThfc05WY3RoSXp1azhMdWhzN3lacUJJQkcwcEVjR2JhVUhfVG9rZW46SkVNdGJxZDdpb1Brckd4RjVGdmNEUXp1bnVkXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![Docker Desktop 中的 RabbitMQ 镜像](/images/posts/messagequeue/03.png)
 
 
 ```text
@@ -61,7 +61,7 @@ docker run -d --hostname rabbitmq-host --name rabbitmq --restart unless-stopped 
 docker run -d --hostname rabbitmq-host --name rabbitmq --restart unless-stopped -p 5672:5672 -p 15672:15672 -e RABBITMQ_DEFAULT_USER=mqadmin -e RABBITMQ_DEFAULT_PASS=mqpass123 -v rabbitmq_data:/var/lib/rabbitmq rabbitmq:4-management
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=NDlkNGQ0ZGY1ZTU1MmIyZDRlMTE5MjYyMzg4ZTFhNDJfdmkwS3pkbXN2S25zN1J1d0Z6bjFzTlp5VnNMZk1aVFFfVG9rZW46TmRDamJoTHdtb3pPMG54MlJVR2NxYUQxbktnXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![启动并检查 RabbitMQ 容器](/images/posts/messagequeue/04.png)
 
 
 Docker ps 查看一下容器
@@ -78,7 +78,7 @@ http://localhost:15672   #后台地址
 ```
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=Y2NlOTAzNDgzOWJkZGU5MjFhZmE0YmYyZDc2NjlhMmRfNzc2c2FQbHhNeW1FYlRHUkFOOUtoY2U3N1EydWNMRXRfVG9rZW46SVNyQmJwTEpJb1prYWh4ZzRPYmNLRUN2bk1kXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![RabbitMQ 管理台概览](/images/posts/messagequeue/05.png)
 
 
 5672   Java、Python 程序连接
@@ -99,7 +99,7 @@ Java 发送者 → RabbitMQ 队列 → Java 接收者 ，来看看消息究竟�
 ## 在IDEA中创建Maven项目
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=YWE5YjExMWJhMjJlMTg3MDRiYWU0YWZmZTlhYzBhY2NfOEhRR3JzS2c2elpyNDdHUEtpYVB0clpoRko4a25ld3VfVG9rZW46WDFLMmJvY3o0b1NGS0d4YUtWQmNOT0VBblZjXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![在 IntelliJ IDEA 中创建 Maven 项目](/images/posts/messagequeue/06.png)
 
 
 安装依赖
@@ -189,13 +189,13 @@ public class Send {
 ```
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=NzVjZjkxYmEzODIyZDM5NmY0MjNiZjEzNDkyYjFhM2RfQnNxRlhQMDJBN0NWNGJxVnhRT0RaUm9qRUhHVDJjdmVfVG9rZW46UkhjcWJ0aHlOb1pFODZ4aE00Z2MyM1dEbmJnXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![发送消息的 Java 示例及运行结果](/images/posts/messagequeue/07.png)
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=YTAwN2IzNGNhYmFhZGFhM2Q4YmU5M2M5ZDU1MGE2ZWFfRlFWclRXZk9meE9ERTJRcVM4NHU2cEtyd29aSlJSRTRfVG9rZW46RG1qcGJvTFVNbzQzV2V4WW1kaGNNWWExbnJkXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![RabbitMQ 管理台中的队列列表](/images/posts/messagequeue/08.png)
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=NDQ3ZmYyMjc4NWQyNTJhMzczMGU1MGU4OGY3YjJhOGJfNkJkNGJEemZoemk0ck55ZmlIMHFHa2IyaDJyeHU5Wm1fVG9rZW46VUNXTGJwZWhXb0pTMEp4dlVKemNKOFkxbktjXzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![接收消息的 Java 示例及运行结果](/images/posts/messagequeue/09.png)
 
 
 发送消息，等待消息，接受消息、
@@ -261,7 +261,7 @@ public class Receive {
 ```
 
 
-![image](https://qcn7qkoanip2.feishu.cn/space/api/box/stream/download/asynccode/?code=NjU0NWQxYTYyM2VlNTE2NzE1NDI0MTIxNTBlOWUxYzNfeWlhbkNOS0xlelZjMzZlM0lHazM2VmJzNTU0T3ZNdmFfVG9rZW46RmpkMGJteEtBb0FROTh4UDd1QmNZUVV3bll0XzE3ODU3NTYwNzI6MTc4NTc1OTY3Ml9WNA&add_watermark=true&scene_type=CCM)
+![消息消费后的队列状态](/images/posts/messagequeue/10.png)
 
 
 这里的ready 从刚才的1 变成了 0
